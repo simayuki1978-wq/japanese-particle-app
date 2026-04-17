@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>助詞トレーニング</title>
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <div class="header">
+    <h1>助詞トレーニング</h1>
+    <div id="progress"></div>
+  </div>
+
+  <div class="card">
+
+    <div id="question" class="question"></div>
+
+    <input id="answer" placeholder="助詞">
+
+    <div id="result" class="result"></div>
+
+    <button class="primary" onclick="check()">答え</button>
+    <button class="secondary" onclick="next()">次へ</button>
+
+    <div id="stats"></div>
+
+    <div class="explain-toggle" onclick="toggleExplanation()">
+      💡 解説を見る
+    </div>
+
+    <div id="explanation" class="explanation hidden"></div>
+
+    <button onclick="resetProgress()">リセット</button>
+
+  </div>
+
+</div>
+
+<script src="questions.js"></script>
+<script src="explanations.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
