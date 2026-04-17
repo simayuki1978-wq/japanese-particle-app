@@ -6,8 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-* { box-sizing: border-box; }
-
 body {
   margin: 0;
   font-family: Arial;
@@ -17,67 +15,40 @@ body {
   align-items: center;
   height: 100vh;
 }
+.app { max-width: 420px; width: 100%; padding: 16px; }
+.header { display: flex; justify-content: space-between; color: white; }
+.card { background: white; border-radius: 16px; padding: 20px; text-align: center; }
+.question { font-size: 22px; margin: 20px 0; }
 
-.app {
-  width: 100%;
-  max-width: 420px;
-  padding: 16px;
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(5,1fr);
+  gap: 8px;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  color: white;
-}
-
-.card {
-  background: white;
-  border-radius: 16px;
-  padding: 20px;
-  text-align: center;
-}
-
-.question {
-  font-size: 22px;
-  margin: 20px 0;
-}
-
-input {
-  width: 80px;
-  padding: 10px;
+.choice {
+  padding: 12px;
   font-size: 18px;
-  text-align: center;
-}
-
-button {
-  width: 100%;
-  padding: 10px;
-  margin-top: 8px;
   border: none;
   border-radius: 10px;
+  background: #eee;
 }
 
-.primary { background: #4a90e2; color: white; }
-.secondary { background: #ddd; }
-.danger { background: #e74c3c; color: white; }
+.choice.correct { background: #2ecc71; color: white; }
+.choice.wrong { background: #e74c3c; color: white; }
 
-.result.correct { color: green; }
-.result.wrong { color: red; }
+.result { margin-top: 10px; font-weight: bold; }
 
-.explain-toggle {
-  margin-top: 10px;
-  color: #4a90e2;
-  cursor: pointer;
-}
-
+.explain-toggle { margin-top: 10px; color: #4a90e2; cursor: pointer; }
 .hidden { display: none; }
+
+.next { margin-top: 10px; padding: 10px; width: 100%; }
 </style>
 </head>
 
 <body>
 
 <div class="app">
-
   <div class="header">
     <h1>助詞トレーニング</h1>
     <div id="progress"></div>
@@ -87,32 +58,30 @@ button {
 
     <div id="question" class="question"></div>
 
-    <input id="answer" placeholder="助詞">
+    <div class="buttons">
+      <button class="choice" onclick="select('は',this)">は</button>
+      <button class="choice" onclick="select('が',this)">が</button>
+      <button class="choice" onclick="select('を',this)">を</button>
+      <button class="choice" onclick="select('に',this)">に</button>
+      <button class="choice" onclick="select('で',this)">で</button>
+    </div>
 
     <div id="result"></div>
 
-    <button class="primary" onclick="check()">答え</button>
-    <button class="secondary" onclick="next()">次へ</button>
+    <button class="next" onclick="next()">次へ</button>
 
     <div id="stats"></div>
 
-    <div class="explain-toggle" onclick="toggleExplanation()">
-      💡 解説
-    </div>
-
+    <div class="explain-toggle" onclick="toggleExplanation()">💡 解説</div>
     <div id="explanation" class="hidden"></div>
 
-    <button class="danger" onclick="resetProgress()">リセット</button>
-
   </div>
-
 </div>
 
 <script>
 
 /* ===== 100問 ===== */
-const questions = [
-
+let questions = [
 /* が */
 { sentence:"猫___寝ている",answer:"が"},
 { sentence:"犬___走っている",answer:"が"},
@@ -219,65 +188,69 @@ const questions = [
 { sentence:"この道___車が多い",answer:"は"},
 { sentence:"夜___星が見える",answer:"は"},
 { sentence:"この問題___難しい",answer:"は"},
-{ sentence:"今日は雨___降っている",answer:"が"},
-{ sentence:"今日は風___強い",answer:"が"},
-{ sentence:"今日は人___多い",answer:"が"}
-
+{ sentence:"春___花が咲く",answer:"は"},
+{ sentence:"秋___葉が落ちる",answer:"は"},
+{ sentence:"今日は天気___いい",answer:"が"}
 ];
 
+/* ===== シャッフル ===== */
+questions.sort(()=>Math.random()-0.5);
+
 /* ===== 解説 ===== */
-const explanations = {
-  "が": {ja:"主体",en:"subject",vi:"chủ thể"},
-  "を": {ja:"対象",en:"object",vi:"đối tượng"},
-  "に": {ja:"行き先",en:"destination",vi:"nơi đến"},
-  "で": {ja:"場所",en:"place",vi:"nơi"},
-  "は": {ja:"トピック",en:"topic",vi:"chủ đề"}
+const explanations={
+"が":{ja:"主体",en:"subject",vi:"chủ thể"},
+"を":{ja:"対象",en:"object",vi:"đối tượng"},
+"に":{ja:"行き先",en:"destination",vi:"nơi đến"},
+"で":{ja:"場所",en:"place",vi:"nơi"},
+"は":{ja:"トピック",en:"topic",vi:"chủ đề"}
 };
 
-let index=0,correct=0,wrong=0;
-
-function save(){
-  localStorage.setItem("p",JSON.stringify({index,correct,wrong}));
-}
-
-function loadSave(){
-  const d=JSON.parse(localStorage.getItem("p"));
-  if(d){index=d.index;correct=d.correct;wrong=d.wrong;}
-}
+let index=0,correct=0,wrong=0,answered=false;
 
 function load(){
   const q=questions[index];
   question.textContent=q.sentence;
-  answer.value="";
   result.textContent="";
+  explanation.classList.add("hidden");
+  answered=false;
+
+  document.querySelectorAll(".choice").forEach(b=>{
+    b.classList.remove("correct","wrong");
+  });
+
   progress.textContent=(index+1)+"/"+questions.length;
   stats.textContent="✔️ "+correct+" / ❗ "+wrong;
 }
 
-function check(){
-  const q=questions[index];
-  const u=answer.value.trim();
+function select(p,btn){
+  if(answered) return;
+  answered=true;
 
-  if(u===q.answer){
+  const q=questions[index];
+
+  if(p===q.answer){
+    btn.classList.add("correct");
     result.textContent="✔️ 正解";
-    result.className="result correct";
     correct++;
   }else{
-    result.textContent="❗ "+q.answer;
-    result.className="result wrong";
+    btn.classList.add("wrong");
+    result.textContent="❗ 正解: "+q.answer;
     wrong++;
+
+    document.querySelectorAll(".choice").forEach(b=>{
+      if(b.textContent===q.answer){
+        b.classList.add("correct");
+      }
+    });
   }
 
   const e=explanations[q.answer];
   explanation.innerHTML=
     "🇯🇵 "+e.ja+"<br>🇺🇸 "+e.en+"<br>🇻🇳 "+e.vi;
-
-  save();
 }
 
 function next(){
   index=(index+1)%questions.length;
-  save();
   load();
 }
 
@@ -285,13 +258,6 @@ function toggleExplanation(){
   explanation.classList.toggle("hidden");
 }
 
-function resetProgress(){
-  localStorage.clear();
-  index=0;correct=0;wrong=0;
-  load();
-}
-
-loadSave();
 load();
 
 </script>
