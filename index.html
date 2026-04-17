@@ -1,12 +1,83 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>助詞トレーニング</title>
+<meta charset="UTF-8">
+<title>助詞トレーニング</title>
 
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial;
+  background: linear-gradient(135deg, #4a90e2, #6fc3ff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.app {
+  width: 100%;
+  max-width: 420px;
+  padding: 16px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  color: white;
+  margin-bottom: 12px;
+}
+
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+.question {
+  font-size: 22px;
+  margin: 20px 0;
+}
+
+input {
+  width: 80px;
+  padding: 10px;
+  font-size: 18px;
+  text-align: center;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.primary { background: #4a90e2; color: white; }
+.secondary { background: #ddd; }
+.danger { background: #e74c3c; color: white; }
+
+.result.correct { color: #2ecc71; }
+.result.wrong { color: #e74c3c; }
+
+.explain-toggle {
+  margin-top: 12px;
+  color: #4a90e2;
+  cursor: pointer;
+}
+
+.hidden { display: none; }
+</style>
 </head>
+
 <body>
 
 <div class="app">
@@ -22,7 +93,7 @@
 
     <input id="answer" placeholder="助詞">
 
-    <div id="result" class="result"></div>
+    <div id="result"></div>
 
     <button class="primary" onclick="check()">答え</button>
     <button class="secondary" onclick="next()">次へ</button>
@@ -33,17 +104,132 @@
       💡 解説を見る
     </div>
 
-    <div id="explanation" class="explanation hidden"></div>
+    <div id="explanation" class="hidden"></div>
 
-    <button onclick="resetProgress()">リセット</button>
+    <button class="danger" onclick="resetProgress()">リセット</button>
 
   </div>
 
 </div>
 
-<script src="questions.js"></script>
-<script src="explanations.js"></script>
-<script src="app.js"></script>
+<script>
+/* ===== 問題（サンプル + 拡張可能） ===== */
+const questions = [
+  { sentence: "猫___寝ている", answer: "が" },
+  { sentence: "水___飲む", answer: "を" },
+  { sentence: "学校___行く", answer: "に" },
+  { sentence: "公園___遊ぶ", answer: "で" },
+  { sentence: "猫___魚が好き", answer: "は" }
+];
+
+/* ===== 解説 ===== */
+const explanations = {
+  "が": { ja: "主体", en: "subject", vi: "chủ thể" },
+  "を": { ja: "対象", en: "object", vi: "đối tượng" },
+  "に": { ja: "行き先", en: "destination", vi: "nơi đến" },
+  "で": { ja: "場所", en: "place", vi: "nơi" },
+  "は": { ja: "トピック", en: "topic", vi: "chủ đề" }
+};
+
+let index = 0;
+let correct = 0;
+let wrong = 0;
+
+/* ===== 保存 ===== */
+function save() {
+  localStorage.setItem("progress", JSON.stringify({ index, correct, wrong }));
+}
+
+/* ===== 読み込み ===== */
+function loadSave() {
+  const data = JSON.parse(localStorage.getItem("progress"));
+  if (data) {
+    index = data.index;
+    correct = data.correct;
+    wrong = data.wrong;
+  }
+}
+
+/* ===== 表示 ===== */
+function load() {
+  const q = questions[index];
+
+  document.getElementById("question").textContent = q.sentence;
+  document.getElementById("answer").value = "";
+  document.getElementById("result").textContent = "";
+
+  document.getElementById("progress").textContent =
+    (index + 1) + " / " + questions.length;
+
+  document.getElementById("stats").textContent =
+    "✔️ " + correct + " / ❗ " + wrong;
+}
+
+/* ===== 判定 ===== */
+function check() {
+  const q = questions[index];
+  const user = document.getElementById("answer").value.trim();
+  const result = document.getElementById("result");
+
+  if (user === q.answer) {
+    result.textContent = "✔️ 正解";
+    result.className = "result correct";
+    correct++;
+  } else {
+    result.textContent = "❗ 正解: " + q.answer;
+    result.className = "result wrong";
+    wrong++;
+  }
+
+  showExplanation(q.answer);
+  save();
+}
+
+/* ===== 解説 ===== */
+function showExplanation(p) {
+  const e = explanations[p];
+  document.getElementById("explanation").innerHTML =
+    "🇯🇵 " + e.ja + "<br>" +
+    "🇺🇸 " + e.en + "<br>" +
+    "🇻🇳 " + e.vi;
+}
+
+function toggleExplanation() {
+  document.getElementById("explanation").classList.toggle("hidden");
+}
+
+/* ===== 次へ ===== */
+function next() {
+  index = (index + 1) % questions.length;
+  save();
+  load();
+}
+
+/* ===== リセット ===== */
+function resetProgress() {
+  localStorage.removeItem("progress");
+  index = 0;
+  correct = 0;
+  wrong = 0;
+  load();
+}
+
+/* ===== PWA（簡易） ===== */
+if ("serviceWorker" in navigator) {
+  const swCode = `
+    self.addEventListener('fetch', e => {
+      e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+    });
+  `;
+  const blob = new Blob([swCode], { type: "application/javascript" });
+  const swURL = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swURL);
+}
+
+/* 初期化 */
+loadSave();
+load();
+</script>
 
 </body>
 </html>
