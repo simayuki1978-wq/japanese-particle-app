@@ -1,0 +1,63 @@
+body {
+  margin: 0;
+  font-family: Arial;
+  background: linear-gradient(135deg, #4a90e2, #6fc3ff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.app {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+}
+
+.header {
+  color: white;
+  display: flex;
+  justify-content: space-between;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.question {
+  font-size: 22px;
+  margin: 20px 0;
+}
+
+input {
+  width: 80px;
+  padding: 10px;
+  font-size: 18px;
+  text-align: center;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: none;
+  border-radius: 10px;
+}
+
+.primary {
+  background: #4a90e2;
+  color: white;
+}
+
+.secondary {
+  background: #ddd;
+}
+
+.result.correct { color: green; }
+.result.wrong { color: red; }
+
+.explanation { margin-top: 10px; }
+.hidden { display: none; }
