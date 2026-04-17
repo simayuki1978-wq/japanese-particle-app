@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>助詞トレーニング</title>
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -11,7 +10,7 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial;
+  font-family: Arial;
   background: linear-gradient(135deg, #4a90e2, #6fc3ff);
   display: flex;
   justify-content: center;
@@ -29,14 +28,12 @@ body {
   display: flex;
   justify-content: space-between;
   color: white;
-  margin-bottom: 12px;
 }
 
 .card {
   background: white;
   border-radius: 16px;
   padding: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
   text-align: center;
 }
 
@@ -54,22 +51,21 @@ input {
 
 button {
   width: 100%;
-  padding: 12px;
+  padding: 10px;
   margin-top: 8px;
   border: none;
   border-radius: 10px;
-  cursor: pointer;
 }
 
 .primary { background: #4a90e2; color: white; }
 .secondary { background: #ddd; }
 .danger { background: #e74c3c; color: white; }
 
-.result.correct { color: #2ecc71; }
-.result.wrong { color: #e74c3c; }
+.result.correct { color: green; }
+.result.wrong { color: red; }
 
 .explain-toggle {
-  margin-top: 12px;
+  margin-top: 10px;
   color: #4a90e2;
   cursor: pointer;
 }
@@ -101,7 +97,7 @@ button {
     <div id="stats"></div>
 
     <div class="explain-toggle" onclick="toggleExplanation()">
-      💡 解説を見る
+      💡 解説
     </div>
 
     <div id="explanation" class="hidden"></div>
@@ -113,122 +109,191 @@ button {
 </div>
 
 <script>
-/* ===== 問題（サンプル + 拡張可能） ===== */
+
+/* ===== 100問 ===== */
 const questions = [
-  { sentence: "猫___寝ている", answer: "が" },
-  { sentence: "水___飲む", answer: "を" },
-  { sentence: "学校___行く", answer: "に" },
-  { sentence: "公園___遊ぶ", answer: "で" },
-  { sentence: "猫___魚が好き", answer: "は" }
+
+/* が */
+{ sentence:"猫___寝ている",answer:"が"},
+{ sentence:"犬___走っている",answer:"が"},
+{ sentence:"雨___降っている",answer:"が"},
+{ sentence:"風___吹いている",answer:"が"},
+{ sentence:"子供___遊んでいる",answer:"が"},
+{ sentence:"先生___来た",answer:"が"},
+{ sentence:"友達___笑っている",answer:"が"},
+{ sentence:"鳥___飛んでいる",answer:"が"},
+{ sentence:"電車___来る",answer:"が"},
+{ sentence:"音___聞こえる",answer:"が"},
+{ sentence:"誰___来た？",answer:"が"},
+{ sentence:"何___落ちた？",answer:"が"},
+{ sentence:"雪___降っている",answer:"が"},
+{ sentence:"水___流れている",answer:"が"},
+{ sentence:"人___集まっている",answer:"が"},
+{ sentence:"赤ちゃん___泣いている",answer:"が"},
+{ sentence:"電話___鳴っている",answer:"が"},
+{ sentence:"ドア___開いた",answer:"が"},
+{ sentence:"星___光っている",answer:"が"},
+{ sentence:"雲___動いている",answer:"が"},
+
+/* を */
+{ sentence:"水___飲む",answer:"を"},
+{ sentence:"ご飯___食べる",answer:"を"},
+{ sentence:"本___読む",answer:"を"},
+{ sentence:"映画___見る",answer:"を"},
+{ sentence:"音楽___聞く",answer:"を"},
+{ sentence:"手紙___書く",answer:"を"},
+{ sentence:"写真___撮る",answer:"を"},
+{ sentence:"テレビ___見る",answer:"を"},
+{ sentence:"靴___履く",answer:"を"},
+{ sentence:"ドア___閉める",answer:"を"},
+{ sentence:"窓___開ける",answer:"を"},
+{ sentence:"名前___書く",answer:"を"},
+{ sentence:"パン___買う",answer:"を"},
+{ sentence:"コーヒー___飲む",answer:"を"},
+{ sentence:"荷物___持つ",answer:"を"},
+{ sentence:"かばん___持つ",answer:"を"},
+{ sentence:"鍵___探す",answer:"を"},
+{ sentence:"車___洗う",answer:"を"},
+{ sentence:"顔___洗う",answer:"を"},
+{ sentence:"道___歩く",answer:"を"},
+
+/* に */
+{ sentence:"学校___行く",answer:"に"},
+{ sentence:"家___帰る",answer:"に"},
+{ sentence:"駅___行く",answer:"に"},
+{ sentence:"東京___行く",answer:"に"},
+{ sentence:"友達___会う",answer:"に"},
+{ sentence:"先生___聞く",answer:"に"},
+{ sentence:"店___行く",answer:"に"},
+{ sentence:"部屋___入る",answer:"に"},
+{ sentence:"外___出る",answer:"に"},
+{ sentence:"椅子___座る",answer:"に"},
+{ sentence:"机___置く",answer:"に"},
+{ sentence:"ここ___来る",answer:"に"},
+{ sentence:"あそこ___行く",answer:"に"},
+{ sentence:"友達___電話する",answer:"に"},
+{ sentence:"人___話す",answer:"に"},
+{ sentence:"子供___教える",answer:"に"},
+{ sentence:"会社___行く",answer:"に"},
+{ sentence:"病院___行く",answer:"に"},
+{ sentence:"玄関___入る",answer:"に"},
+{ sentence:"窓___近づく",answer:"に"},
+
+/* で */
+{ sentence:"公園___遊ぶ",answer:"で"},
+{ sentence:"学校___勉強する",answer:"で"},
+{ sentence:"家___食べる",answer:"で"},
+{ sentence:"図書館___読む",answer:"で"},
+{ sentence:"店___買う",answer:"で"},
+{ sentence:"電車___行く",answer:"で"},
+{ sentence:"バス___行く",answer:"で"},
+{ sentence:"手___書く",answer:"で"},
+{ sentence:"日本語___話す",answer:"で"},
+{ sentence:"ここ___待つ",answer:"で"},
+{ sentence:"外___遊ぶ",answer:"で"},
+{ sentence:"会社___働く",answer:"で"},
+{ sentence:"教室___座る",answer:"で"},
+{ sentence:"駅___待つ",answer:"で"},
+{ sentence:"ホテル___泊まる",answer:"で"},
+{ sentence:"キッチン___料理する",answer:"で"},
+{ sentence:"パソコン___書く",answer:"で"},
+{ sentence:"電話___話す",answer:"で"},
+{ sentence:"庭___遊ぶ",answer:"で"},
+{ sentence:"海___泳ぐ",answer:"で"},
+
+/* は */
+{ sentence:"猫___魚が好き",answer:"は"},
+{ sentence:"この本___面白い",answer:"は"},
+{ sentence:"日本___食べ物が美味しい",answer:"は"},
+{ sentence:"夏___暑い",answer:"は"},
+{ sentence:"冬___寒い",answer:"は"},
+{ sentence:"ここ___静かだ",answer:"は"},
+{ sentence:"山___高い",answer:"は"},
+{ sentence:"空___青い",answer:"は"},
+{ sentence:"この店___安い",answer:"は"},
+{ sentence:"この町___人が多い",answer:"は"},
+{ sentence:"この部屋___広い",answer:"は"},
+{ sentence:"海___水が冷たい",answer:"は"},
+{ sentence:"この映画___人気がある",answer:"は"},
+{ sentence:"この料理___味がいい",answer:"は"},
+{ sentence:"この道___車が多い",answer:"は"},
+{ sentence:"夜___星が見える",answer:"は"},
+{ sentence:"この問題___難しい",answer:"は"},
+{ sentence:"今日は雨___降っている",answer:"が"},
+{ sentence:"今日は風___強い",answer:"が"},
+{ sentence:"今日は人___多い",answer:"が"}
+
 ];
 
 /* ===== 解説 ===== */
 const explanations = {
-  "が": { ja: "主体", en: "subject", vi: "chủ thể" },
-  "を": { ja: "対象", en: "object", vi: "đối tượng" },
-  "に": { ja: "行き先", en: "destination", vi: "nơi đến" },
-  "で": { ja: "場所", en: "place", vi: "nơi" },
-  "は": { ja: "トピック", en: "topic", vi: "chủ đề" }
+  "が": {ja:"主体",en:"subject",vi:"chủ thể"},
+  "を": {ja:"対象",en:"object",vi:"đối tượng"},
+  "に": {ja:"行き先",en:"destination",vi:"nơi đến"},
+  "で": {ja:"場所",en:"place",vi:"nơi"},
+  "は": {ja:"トピック",en:"topic",vi:"chủ đề"}
 };
 
-let index = 0;
-let correct = 0;
-let wrong = 0;
+let index=0,correct=0,wrong=0;
 
-/* ===== 保存 ===== */
-function save() {
-  localStorage.setItem("progress", JSON.stringify({ index, correct, wrong }));
+function save(){
+  localStorage.setItem("p",JSON.stringify({index,correct,wrong}));
 }
 
-/* ===== 読み込み ===== */
-function loadSave() {
-  const data = JSON.parse(localStorage.getItem("progress"));
-  if (data) {
-    index = data.index;
-    correct = data.correct;
-    wrong = data.wrong;
-  }
+function loadSave(){
+  const d=JSON.parse(localStorage.getItem("p"));
+  if(d){index=d.index;correct=d.correct;wrong=d.wrong;}
 }
 
-/* ===== 表示 ===== */
-function load() {
-  const q = questions[index];
-
-  document.getElementById("question").textContent = q.sentence;
-  document.getElementById("answer").value = "";
-  document.getElementById("result").textContent = "";
-
-  document.getElementById("progress").textContent =
-    (index + 1) + " / " + questions.length;
-
-  document.getElementById("stats").textContent =
-    "✔️ " + correct + " / ❗ " + wrong;
+function load(){
+  const q=questions[index];
+  question.textContent=q.sentence;
+  answer.value="";
+  result.textContent="";
+  progress.textContent=(index+1)+"/"+questions.length;
+  stats.textContent="✔️ "+correct+" / ❗ "+wrong;
 }
 
-/* ===== 判定 ===== */
-function check() {
-  const q = questions[index];
-  const user = document.getElementById("answer").value.trim();
-  const result = document.getElementById("result");
+function check(){
+  const q=questions[index];
+  const u=answer.value.trim();
 
-  if (user === q.answer) {
-    result.textContent = "✔️ 正解";
-    result.className = "result correct";
+  if(u===q.answer){
+    result.textContent="✔️ 正解";
+    result.className="result correct";
     correct++;
-  } else {
-    result.textContent = "❗ 正解: " + q.answer;
-    result.className = "result wrong";
+  }else{
+    result.textContent="❗ "+q.answer;
+    result.className="result wrong";
     wrong++;
   }
 
-  showExplanation(q.answer);
+  const e=explanations[q.answer];
+  explanation.innerHTML=
+    "🇯🇵 "+e.ja+"<br>🇺🇸 "+e.en+"<br>🇻🇳 "+e.vi;
+
   save();
 }
 
-/* ===== 解説 ===== */
-function showExplanation(p) {
-  const e = explanations[p];
-  document.getElementById("explanation").innerHTML =
-    "🇯🇵 " + e.ja + "<br>" +
-    "🇺🇸 " + e.en + "<br>" +
-    "🇻🇳 " + e.vi;
-}
-
-function toggleExplanation() {
-  document.getElementById("explanation").classList.toggle("hidden");
-}
-
-/* ===== 次へ ===== */
-function next() {
-  index = (index + 1) % questions.length;
+function next(){
+  index=(index+1)%questions.length;
   save();
   load();
 }
 
-/* ===== リセット ===== */
-function resetProgress() {
-  localStorage.removeItem("progress");
-  index = 0;
-  correct = 0;
-  wrong = 0;
+function toggleExplanation(){
+  explanation.classList.toggle("hidden");
+}
+
+function resetProgress(){
+  localStorage.clear();
+  index=0;correct=0;wrong=0;
   load();
 }
 
-/* ===== PWA（簡易） ===== */
-if ("serviceWorker" in navigator) {
-  const swCode = `
-    self.addEventListener('fetch', e => {
-      e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
-    });
-  `;
-  const blob = new Blob([swCode], { type: "application/javascript" });
-  const swURL = URL.createObjectURL(blob);
-  navigator.serviceWorker.register(swURL);
-}
-
-/* 初期化 */
 loadSave();
 load();
+
 </script>
 
 </body>
