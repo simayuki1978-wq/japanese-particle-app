@@ -1,266 +1,87 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<title>助詞トレーニング</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日本語トレーニング</title>
+    <style>
+        /* 全体のレイアウト */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f5f7fa;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            color: #333;
+        }
 
-<style>
-body {
-  margin: 0;
-  font-family: Arial;
-  background: linear-gradient(135deg, #4a90e2, #6fc3ff);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-.app { max-width: 420px; width: 100%; padding: 16px; }
-.header { display: flex; justify-content: space-between; color: white; }
-.card { background: white; border-radius: 16px; padding: 20px; text-align: center; }
-.question { font-size: 22px; margin: 20px 0; }
+        h1 {
+            margin-bottom: 40px;
+            font-size: 1.8rem;
+            color: #2c3e50;
+        }
 
-.buttons {
-  display: grid;
-  grid-template-columns: repeat(5,1fr);
-  gap: 8px;
-}
+        /* ボタンのコンテナ */
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 80%;
+            max-width: 300px;
+        }
 
-.choice {
-  padding: 12px;
-  font-size: 18px;
-  border: none;
-  border-radius: 10px;
-  background: #eee;
-}
+        /* ボタンの基本デザイン */
+        .btn {
+            display: block;
+            padding: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            border-radius: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
 
-.choice.correct { background: #2ecc71; color: white; }
-.choice.wrong { background: #e74c3c; color: white; }
+        .btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+        }
 
-.result { margin-top: 10px; font-weight: bold; }
+        /* 助詞ボタンの色（ピンク系） */
+        .btn-particle {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+        }
 
-.explain-toggle { margin-top: 10px; color: #4a90e2; cursor: pointer; }
-.hidden { display: none; }
+        /* 作文ボタンの色（ブルー系） */
+        .btn-composition {
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            color: #333; /* 文字色を濃くして読みやすく */
+        }
 
-.next { margin-top: 10px; padding: 10px; width: 100%; }
-</style>
+        .footer {
+            margin-top: 50px;
+            font-size: 0.8rem;
+            color: #95a5a6;
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="app">
-  <div class="header">
-    <h1>助詞トレーニング</h1>
-    <div id="progress"></div>
-  </div>
+    <h1>日本語トレーニング</h1>
 
-  <div class="card">
-
-    <div id="question" class="question"></div>
-
-    <div class="buttons">
-      <button class="choice" onclick="select('は',this)">は</button>
-      <button class="choice" onclick="select('が',this)">が</button>
-      <button class="choice" onclick="select('を',this)">を</button>
-      <button class="choice" onclick="select('に',this)">に</button>
-      <button class="choice" onclick="select('で',this)">で</button>
+    <div class="btn-container">
+        <a href="particle.html" class="btn btn-particle">助詞ボタン</a>
+        
+        <a href="composition.html" class="btn btn-composition">作文ボタン</a>
     </div>
 
-    <div id="result"></div>
-
-    <button class="next" onclick="next()">次へ</button>
-
-    <div id="stats"></div>
-
-    <div class="explain-toggle" onclick="toggleExplanation()">💡 解説</div>
-    <div id="explanation" class="hidden"></div>
-
-  </div>
-</div>
-
-<script>
-
-/* ===== 100問 ===== */
-let questions = [
-/* が */
-{ sentence:"猫___寝ている",answer:"が"},
-{ sentence:"犬___走っている",answer:"が"},
-{ sentence:"雨___降っている",answer:"が"},
-{ sentence:"風___吹いている",answer:"が"},
-{ sentence:"子供___遊んでいる",answer:"が"},
-{ sentence:"先生___来た",answer:"が"},
-{ sentence:"友達___笑っている",answer:"が"},
-{ sentence:"鳥___飛んでいる",answer:"が"},
-{ sentence:"電車___来る",answer:"が"},
-{ sentence:"音___聞こえる",answer:"が"},
-{ sentence:"誰___来た？",answer:"が"},
-{ sentence:"何___落ちた？",answer:"が"},
-{ sentence:"雪___降っている",answer:"が"},
-{ sentence:"水___流れている",answer:"が"},
-{ sentence:"人___集まっている",answer:"が"},
-{ sentence:"赤ちゃん___泣いている",answer:"が"},
-{ sentence:"電話___鳴っている",answer:"が"},
-{ sentence:"ドア___開いた",answer:"が"},
-{ sentence:"星___光っている",answer:"が"},
-{ sentence:"雲___動いている",answer:"が"},
-
-/* を */
-{ sentence:"水___飲む",answer:"を"},
-{ sentence:"ご飯___食べる",answer:"を"},
-{ sentence:"本___読む",answer:"を"},
-{ sentence:"映画___見る",answer:"を"},
-{ sentence:"音楽___聞く",answer:"を"},
-{ sentence:"手紙___書く",answer:"を"},
-{ sentence:"写真___撮る",answer:"を"},
-{ sentence:"テレビ___見る",answer:"を"},
-{ sentence:"靴___履く",answer:"を"},
-{ sentence:"ドア___閉める",answer:"を"},
-{ sentence:"窓___開ける",answer:"を"},
-{ sentence:"名前___書く",answer:"を"},
-{ sentence:"パン___買う",answer:"を"},
-{ sentence:"コーヒー___飲む",answer:"を"},
-{ sentence:"荷物___持つ",answer:"を"},
-{ sentence:"かばん___持つ",answer:"を"},
-{ sentence:"鍵___探す",answer:"を"},
-{ sentence:"車___洗う",answer:"を"},
-{ sentence:"顔___洗う",answer:"を"},
-{ sentence:"道___歩く",answer:"を"},
-
-/* に */
-{ sentence:"学校___行く",answer:"に"},
-{ sentence:"家___帰る",answer:"に"},
-{ sentence:"駅___行く",answer:"に"},
-{ sentence:"東京___行く",answer:"に"},
-{ sentence:"友達___会う",answer:"に"},
-{ sentence:"先生___聞く",answer:"に"},
-{ sentence:"店___行く",answer:"に"},
-{ sentence:"部屋___入る",answer:"に"},
-{ sentence:"外___出る",answer:"に"},
-{ sentence:"椅子___座る",answer:"に"},
-{ sentence:"机___置く",answer:"に"},
-{ sentence:"ここ___来る",answer:"に"},
-{ sentence:"あそこ___行く",answer:"に"},
-{ sentence:"友達___電話する",answer:"に"},
-{ sentence:"人___話す",answer:"に"},
-{ sentence:"子供___教える",answer:"に"},
-{ sentence:"会社___行く",answer:"に"},
-{ sentence:"病院___行く",answer:"に"},
-{ sentence:"玄関___入る",answer:"に"},
-{ sentence:"窓___近づく",answer:"に"},
-
-/* で */
-{ sentence:"公園___遊ぶ",answer:"で"},
-{ sentence:"学校___勉強する",answer:"で"},
-{ sentence:"家___食べる",answer:"で"},
-{ sentence:"図書館___読む",answer:"で"},
-{ sentence:"店___買う",answer:"で"},
-{ sentence:"電車___行く",answer:"で"},
-{ sentence:"バス___行く",answer:"で"},
-{ sentence:"手___書く",answer:"で"},
-{ sentence:"日本語___話す",answer:"で"},
-{ sentence:"ここ___待つ",answer:"で"},
-{ sentence:"外___遊ぶ",answer:"で"},
-{ sentence:"会社___働く",answer:"で"},
-{ sentence:"教室___座る",answer:"で"},
-{ sentence:"駅___待つ",answer:"で"},
-{ sentence:"ホテル___泊まる",answer:"で"},
-{ sentence:"キッチン___料理する",answer:"で"},
-{ sentence:"パソコン___書く",answer:"で"},
-{ sentence:"電話___話す",answer:"で"},
-{ sentence:"庭___遊ぶ",answer:"で"},
-{ sentence:"海___泳ぐ",answer:"で"},
-
-/* は */
-{ sentence:"猫___魚が好き",answer:"は"},
-{ sentence:"この本___面白い",answer:"は"},
-{ sentence:"日本___食べ物が美味しい",answer:"は"},
-{ sentence:"夏___暑い",answer:"は"},
-{ sentence:"冬___寒い",answer:"は"},
-{ sentence:"ここ___静かだ",answer:"は"},
-{ sentence:"山___高い",answer:"は"},
-{ sentence:"空___青い",answer:"は"},
-{ sentence:"この店___安い",answer:"は"},
-{ sentence:"この町___人が多い",answer:"は"},
-{ sentence:"この部屋___広い",answer:"は"},
-{ sentence:"海___水が冷たい",answer:"は"},
-{ sentence:"この映画___人気がある",answer:"は"},
-{ sentence:"この料理___味がいい",answer:"は"},
-{ sentence:"この道___車が多い",answer:"は"},
-{ sentence:"夜___星が見える",answer:"は"},
-{ sentence:"この問題___難しい",answer:"は"},
-{ sentence:"春___花が咲く",answer:"は"},
-{ sentence:"秋___葉が落ちる",answer:"は"},
-{ sentence:"今日は天気___いい",answer:"が"}
-];
-
-/* ===== シャッフル ===== */
-questions.sort(()=>Math.random()-0.5);
-
-/* ===== 解説 ===== */
-const explanations={
-"が":{ja:"主体",en:"subject",vi:"chủ thể"},
-"を":{ja:"対象",en:"object",vi:"đối tượng"},
-"に":{ja:"行き先",en:"destination",vi:"nơi đến"},
-"で":{ja:"場所",en:"place",vi:"nơi"},
-"は":{ja:"トピック",en:"topic",vi:"chủ đề"}
-};
-
-let index=0,correct=0,wrong=0,answered=false;
-
-function load(){
-  const q=questions[index];
-  question.textContent=q.sentence;
-  result.textContent="";
-  explanation.classList.add("hidden");
-  answered=false;
-
-  document.querySelectorAll(".choice").forEach(b=>{
-    b.classList.remove("correct","wrong");
-  });
-
-  progress.textContent=(index+1)+"/"+questions.length;
-  stats.textContent="✔️ "+correct+" / ❗ "+wrong;
-}
-
-function select(p,btn){
-  if(answered) return;
-  answered=true;
-
-  const q=questions[index];
-
-  if(p===q.answer){
-    btn.classList.add("correct");
-    result.textContent="✔️ 正解";
-    correct++;
-  }else{
-    btn.classList.add("wrong");
-    result.textContent="❗ 正解: "+q.answer;
-    wrong++;
-
-    document.querySelectorAll(".choice").forEach(b=>{
-      if(b.textContent===q.answer){
-        b.classList.add("correct");
-      }
-    });
-  }
-
-  const e=explanations[q.answer];
-  explanation.innerHTML=
-    "🇯🇵 "+e.ja+"<br>🇺🇸 "+e.en+"<br>🇻🇳 "+e.vi;
-}
-
-function next(){
-  index=(index+1)%questions.length;
-  load();
-}
-
-function toggleExplanation(){
-  explanation.classList.toggle("hidden");
-}
-
-load();
-
-</script>
+    <div class="footer">© 2024 日本語学習サポート</div>
 
 </body>
 </html>
