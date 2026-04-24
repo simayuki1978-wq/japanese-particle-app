@@ -127,7 +127,7 @@
         }
     }
 
-    function setupApp(rows) {
+        function setupApp(rows) {
         const warehouse = document.getElementById('warehouse');
         const selectF = document.getElementById('predicate-roll');
         const headers = rows[0];
@@ -142,10 +142,23 @@
             card.className = `word-card color-${i}`;
             card.id = 'card-' + i;
             card.draggable = true;
+            
+            // ★ここを修正しました：randomWord（単語）だけを表示するように変更
             card.innerHTML = `<span class="word-text">${randomWord}</span>`;
+            
             card.ondragstart = drag;
             warehouse.appendChild(card);
         }
+
+        // F列（述語）の処理はそのまま
+        const fWords = rows.slice(1).map(r => r[5]).filter(w => w && w.trim() !== "");
+        selectF.innerHTML = `<option value="">(${(headers[5] || "述語").trim()})</option>`;
+        fWords.forEach(w => {
+            const opt = document.createElement('option');
+            opt.value = w; opt.innerText = w;
+            selectF.appendChild(opt);
+        });
+    }
 
         // F列（述語）
         const fWords = rows.slice(1).map(r => r[5]).filter(w => w && w.trim() !== "");
