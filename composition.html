@@ -142,7 +142,7 @@
             card.className = `word-card color-${i}`;
             card.id = 'card-' + i;
             card.draggable = true;
-            card.innerHTML = `<span class="type-label">${headers[i] || ""}</span><span class="word-text">${randomWord}</span>`;
+            card.innerHTML = `<span class="word-text">${randomWord}</span>`;
             card.ondragstart = drag;
             warehouse.appendChild(card);
         }
