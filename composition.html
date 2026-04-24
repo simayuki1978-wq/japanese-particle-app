@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>作文トレーニング - 行列再現版</title>
+    <title>作文トレーニング</title>
     <style>
         :root {
             --bg: #f5f7fa;
@@ -11,29 +11,36 @@
             --accent: #2196F3;
         }
         body { font-family: 'Helvetica Neue', Arial, sans-serif; background: var(--bg); padding: 10px; margin: 0; display: flex; flex-direction: column; align-items: center; }
-        .container { width: 100%; max-width: 800px; text-align: center; position: relative; padding-top: 40px; }
+        .container { width: 100%; max-width: 800px; text-align: center; position: relative; padding-top: 50px; }
         
+        /* 右上のTopボタン */
         .top-btn {
-            position: absolute; top: 0; right: 0;
+            position: absolute; top: 5px; right: 0;
             padding: 8px 16px; background-color: #555; color: white;
             text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.9rem;
+            z-index: 10;
         }
 
-        /* 表の再現性を高めるスタイル */
+        /* 表のスクロール対応 */
         .table-section {
-            width: 100%; overflow-x: auto; margin-bottom: 20px;
+            width: 100%; 
+            overflow-x: auto; /* 横スクロールを有効化 */
+            -webkit-overflow-scrolling: touch; /* iOSのスクロールを滑らかに */
+            margin-bottom: 20px;
             background: white; border: 1px solid #ccc; border-radius: 8px;
         }
         .sample-table {
-            width: 100%; border-collapse: collapse; font-size: 0.85rem; table-layout: fixed; /* 列幅を固定 */
+            width: 100%; border-collapse: collapse; font-size: 0.85rem;
+            min-width: 600px; /* スマホでスクロールさせるための最小幅 */
         }
         .sample-table th, .sample-table td {
             border: 1px solid #ddd; padding: 10px; text-align: center;
-            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+            word-break: break-all;
         }
         .sample-table th { background-color: #f2f2f2; font-weight: bold; }
         .sample-table tr:nth-child(even) { background-color: #fafafa; }
 
+        /* 入力エリア */
         .workspace-outer {
             background: var(--panel-bg); border: 3px solid #333; border-radius: 15px;
             padding: 20px; margin-bottom: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
@@ -42,21 +49,25 @@
         .guide-msg { font-size: 0.85rem; color: #d32f2f; font-weight: bold; margin-bottom: 10px; }
         
         .main-input-zone {
-            width: 100%; min-height: 120px; border: none; font-size: 1.2rem; line-height: 1.8;
-            resize: none; outline: none; font-family: inherit;
+            width: 100%; min-height: 140px; border: none; font-size: 1.2rem; line-height: 1.8;
+            resize: none; outline: none; font-family: inherit; box-sizing: border-box;
             background-image: radial-gradient(#ddd 1px, transparent 1px); background-size: 24px 24px;
         }
 
+        /* 述語エリア */
         .predicate-container {
             display: flex; justify-content: flex-end; align-items: center; gap: 10px; width: 100%;
+            margin-top: 10px;
         }
         .predicate-label { font-weight: bold; font-size: 1.1rem; }
         .predicate-select {
             width: 170px; height: 48px; border: 2px solid var(--accent);
             border-radius: 10px; font-size: 1.1rem; font-weight: bold;
             text-align: center; background: #e3f2fd; color: #2196F3;
+            -webkit-appearance: none; /* iOS標準デザインをリセット */
         }
-        .nav-link { margin-top: 30px; display: block; color: #888; text-decoration: none; font-size: 0.8rem; }
+        
+        /* 戻るボタンは削除しました */
     </style>
 </head>
 <body>
@@ -83,30 +94,17 @@
         </select>
         <span style="font-size: 1.5rem; font-weight: bold;">。</span>
     </div>
-
-    <a href="index.html" class="nav-link">← 戻る</a>
 </div>
 
 <script>
     const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTDRPlyoBQrG9wzUadhnR8OY9sxuPhkRRpO_WO0BNs-H_f349__5bK5vN6ZYb3U_w/pub?gid=1136664882&single=true&output=csv";
 
-    // CSVをパースする関数（引用符対応など精度重視）
-    function parseCSV(text) {
-        const rows = [];
-        const lines = text.split(/\r?\n/);
-        for (let line of lines) {
-            if (line.trim() === "") continue;
-            // 簡易的なCSVパース（列内のカンマには非対応ですが、通常データならこれで列がズレにくくなります）
-            rows.push(line.split(','));
-        }
-        return rows;
-    }
-
     async function init() {
         try {
             const response = await fetch(CSV_URL);
             const text = await response.text();
-            const rows = parseCSV(text);
+            // 行ごとに分割。空行は除外
+            const rows = text.split(/\r?\n/).filter(r => r.trim() !== "").map(r => r.split(','));
             
             if (rows.length > 0) {
                 renderTable(rows);
@@ -121,23 +119,22 @@
         const headerTarget = document.getElementById('table-header');
         const bodyTarget = document.getElementById('table-body');
         
-        // ヘッダー（スプレッドシート1行目 A-E列）
         const headers = rows[0];
+        // ヘッダー生成（A-E列固定）
         let hHtml = "<tr>";
         for (let i = 0; i < 5; i++) {
-            hHtml += `<th>${headers[i] !== undefined ? headers[i] : ""}</th>`;
+            hHtml += `<th>${headers && headers[i] !== undefined ? headers[i] : ""}</th>`;
         }
         hHtml += "</tr>";
         headerTarget.innerHTML = hHtml;
 
-        // データ（スプレッドシート2行目〜6行目 A-E列）
+        // データ生成（2行目〜6行目 A-E列固定）
         let bHtml = "";
         for (let r = 1; r < 6; r++) {
             bHtml += "<tr>";
             for (let c = 0; c < 5; c++) {
-                // 列が存在しない、または空の場合でもセルを維持する
-                const cellValue = (rows[r] && rows[r][c] !== undefined) ? rows[r][c] : "";
-                bHtml += `<td>${cellValue}</td>`;
+                const val = (rows[r] && rows[r][c] !== undefined) ? rows[r][c] : "";
+                bHtml += `<td>${val}</td>`;
             }
             bHtml += "</tr>";
         }
@@ -147,11 +144,11 @@
     function renderPredicate(rows) {
         const selectF = document.getElementById('predicate-roll');
         const headers = rows[0];
-        // F列（index 5）をすべて取得
+        // F列（index 5）
         const fWords = rows.slice(1).map(r => r[5]).filter(w => w !== undefined && w.trim() !== "");
-        const fLabel = headers[5] ? headers[5].trim() : "述語";
+        const label = headers && headers[5] ? headers[5].trim() : "述語";
         
-        selectF.innerHTML = `<option value="">(${fLabel})</option>`;
+        selectF.innerHTML = `<option value="">(${label})</option>`;
         fWords.forEach(w => {
             const opt = document.createElement('option');
             opt.value = w; opt.innerText = w;
