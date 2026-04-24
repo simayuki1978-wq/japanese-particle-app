@@ -3,46 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>作文トレーニング - 並べ替え</title>
+    <title>作文トレーニング - 文章完成型</title>
     <style>
-        :root { --accent: #2196F3; --bg: #f0f2f5; }
-        body { font-family: sans-serif; background: var(--bg); padding: 20px; text-align: center; }
-        .container { max-width: 800px; margin: 0 auto; }
+        :root {
+            --bg: #f5f7fa;
+            --panel-bg: #ffffff;
+            --accent: #2196F3;
+        }
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; background: var(--bg); padding: 10px; margin: 0; display: flex; flex-direction: column; align-items: center; }
+        .container { width: 100%; max-width: 900px; text-align: center; }
         
-        .rule { font-weight: bold; margin-bottom: 20px; color: #555; }
+        .rule { font-weight: bold; margin: 10px 0; color: #555; font-size: 0.9rem; }
 
-        /* 単語カードのスタイル */
+        /* 上段：単語倉庫（小さく） */
+        .warehouse-section {
+            background: rgba(255,255,255,0.6); border: 1px dashed #ccc; border-radius: 10px;
+            padding: 10px; margin-bottom: 20px; min-height: 80px;
+        }
+
+        /* 下段：組み立てエリア（大きく） */
+        .workspace-section {
+            background: var(--panel-bg); border: 3px solid #333; border-radius: 20px;
+            padding: 40px 20px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .flex-box { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 5px; }
+
+        /* 単語カードのデザイン */
         .word-card {
-            display: inline-block; padding: 10px 15px; background: white;
-            border: 1px solid #ccc; border-radius: 8px; cursor: grab;
-            margin: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            user-select: none;
+            display: flex; flex-direction: column; align-items: center;
+            min-width: 80px; padding: 5px 10px; border-radius: 8px;
+            cursor: grab; border: 1px solid rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); user-select: none;
         }
-        .word-card:active { cursor: grabbing; }
+        .word-card .type-label { font-size: 0.6rem; margin-bottom: 3px; opacity: 0.8; font-weight: bold; }
+        .word-card .word-text { font-size: 1.1rem; font-weight: bold; }
 
-        /* エリアのスタイル */
-        .area-label { font-size: 0.8rem; color: #888; margin-bottom: 5px; }
-        .drop-zone-container {
-            background: #fff; border: 3px solid #444; border-radius: 15px;
-            padding: 20px; margin-bottom: 20px; min-height: 100px;
-        }
-        
-        .flex-box { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 10px; }
+        /* 列ごとの色分け */
+        .color-0 { background-color: #ff9a9e; color: #fff; }
+        .color-1 { background-color: #a1c4fd; color: #333; }
+        .color-2 { background-color: #84fab0; color: #333; }
+        .color-3 { background-color: #fccb90; color: #333; }
+        .color-4 { background-color: #e0c3fc; color: #333; }
 
-        /* 組み立て枠 */
+        /* 下の組み立て枠 */
         .drop-target {
-            width: 100px; height: 50px; border: 2px dashed #bbb;
-            border-radius: 8px; display: flex; align-items: center; justify-content: center;
+            min-width: 100px; min-height: 60px; border-bottom: 3px solid #ddd;
+            margin: 0 5px; display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s;
         }
+        .drop-target:empty::before { content: "？"; color: #ccc; font-weight: bold; }
 
         /* 述語（F列） */
+        .predicate-area { margin-left: 10px; padding-left: 10px; border-left: 2px solid #eee; }
         .predicate-select {
-            width: 120px; height: 50px; border: 2px solid var(--accent);
-            border-radius: 8px; font-size: 1rem; text-align: center; background: #e3f2fd;
+            width: 130px; height: 55px; border: 2px solid var(--accent);
+            border-radius: 12px; font-size: 1.1rem; font-weight: bold;
+            text-align: center; background: #e3f2fd; color: #2196F3;
         }
 
-        .btn-refresh { background: #333; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-bottom: 10px; }
-        .nav-link { margin-top: 30px; display: block; color: #666; text-decoration: none; }
+        .btn-refresh { background: #555; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-size: 0.9rem; }
+        .nav-link { margin-top: 20px; display: block; color: #888; text-decoration: none; font-size: 0.8rem; }
     </style>
 </head>
 <body>
@@ -50,14 +71,12 @@
 <div class="container">
     <div class="rule">ルール：必要なことば ＋ 述語</div>
 
-    <div class="area-label">【単語をえらんで、下の点線に運ぼう】</div>
-    <div id="word-warehouse" class="drop-zone-container flex-box" ondrop="drop(event)" ondragover="allowDrop(event)">
+    <div id="warehouse" class="warehouse-section flex-box" ondrop="drop(event)" ondragover="allowDrop(event)">
         </div>
 
-    <button class="btn-refresh" onclick="location.reload()">🔄 単語をリセット</button>
+    <button class="btn-refresh" onclick="location.reload()">🔄 つぎの問題（単語をかえる）</button>
 
-    <div class="area-label">【組み立て枠】</div>
-    <div class="drop-zone-container">
+    <div class="workspace-section">
         <div class="flex-box">
             <div class="drop-target" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
             <div class="drop-target" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
@@ -65,9 +84,11 @@
             <div class="drop-target" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
             <div class="drop-target" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
             
-            <select id="predicate-roll" class="predicate-select">
-                <option value="">（述語）</option>
-            </select>
+            <div class="predicate-area">
+                <select id="predicate-roll" class="predicate-select">
+                    <option value="">（述語）</option>
+                </select>
+            </div>
         </div>
     </div>
 
@@ -77,67 +98,54 @@
 <script>
     const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTDRPlyoBQrG9wzUadhnR8OY9sxuPhkRRpO_WO0BNs-H_f349__5bK5vN6ZYb3U_w/pub?gid=1136664882&single=true&output=csv";
 
-    // データが取得できなかった時のバックアップデータ
-    const backupData = [
-        ["ごはんを", "パンを", "りんごを"],
-        ["学校で", "家で", "公園で"],
-        ["明日", "今日", "昨日"],
-        ["友達と", "家族と", "一人で"],
-        ["楽しく", "速く", "ゆっくり"],
-        ["食べる", "行く", "遊ぶ"] // F列（述語）
-    ];
-
     async function init() {
         try {
             const response = await fetch(CSV_URL);
-            if (!response.ok) throw new Error();
             const text = await response.text();
             const rows = text.split('\n').map(r => r.split(','));
             setupApp(rows);
         } catch (e) {
-            console.log("Using backup data");
-            setupApp(backupData);
+            alert("データの読み込みに失敗しました。CSVの公開設定を確認してください。");
         }
     }
 
     function setupApp(rows) {
-        const warehouse = document.getElementById('word-warehouse');
+        const warehouse = document.getElementById('warehouse');
         const selectF = document.getElementById('predicate-roll');
-        
-        // A〜E列（0〜4列目）から各1つずつランダムに抽出してカード作成
+        const headers = rows[0]; // 1列目：種類
+
+        // A〜E列からランダムに1つずつ
         for (let i = 0; i < 5; i++) {
             const wordsInCol = rows.slice(1).map(r => r[i]).filter(w => w && w.trim() !== "");
             const randomWord = wordsInCol[Math.floor(Math.random() * wordsInCol.length)];
             
             const card = document.createElement('div');
-            card.className = 'word-card';
+            card.className = `word-card color-${i}`;
             card.id = 'card-' + i;
             card.draggable = true;
-            card.innerText = randomWord;
+            card.innerHTML = `<span class="type-label">${headers[i]}</span><span class="word-text">${randomWord}</span>`;
             card.ondragstart = drag;
             warehouse.appendChild(card);
         }
 
-        // F列（5列目）をドロップダウンに追加
+        // F列（5番目）を述語ドロップダウンへ
+        const fHeader = headers[5] || "述語";
         const fWords = rows.slice(1).map(r => r[5]).filter(w => w && w.trim() !== "");
+        selectF.innerHTML = `<option value="">(${fHeader})</option>`;
         fWords.forEach(w => {
             const opt = document.createElement('option');
-            opt.value = w;
-            opt.innerText = w;
+            opt.value = w; opt.innerText = w;
             selectF.appendChild(opt);
         });
     }
 
-    // ドラッグ＆ドロップのロジック
     function allowDrop(ev) { ev.preventDefault(); }
     function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
     function drop(ev) {
         ev.preventDefault();
         const data = ev.dataTransfer.getData("text");
         const draggedElement = document.getElementById(data);
-        
-        // ドロップ先が drop-target か warehouse の場合のみ受け入れる
-        if (ev.target.classList.contains('drop-target') || ev.target.id === 'word-warehouse') {
+        if (ev.target.classList.contains('drop-target') || ev.target.id === 'warehouse') {
             ev.target.appendChild(draggedElement);
         }
     }
