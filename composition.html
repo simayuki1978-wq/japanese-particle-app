@@ -1,158 +1,471 @@
 <!DOCTYPE html>
+
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>作文トレーニング</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Kaisei+Decol:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #f5f7fa;
-            --panel-bg: #ffffff;
-            --accent: #2196F3;
-        }
-        body { font-family: 'Helvetica Neue', Arial, sans-serif; background: var(--bg); padding: 10px; margin: 0; display: flex; flex-direction: column; align-items: center; }
-        .container { width: 100%; max-width: 800px; text-align: center; position: relative; padding-top: 50px; }
-        
-        /* 右上のTopボタン */
-        .top-btn {
-            position: absolute; top: 5px; right: 0;
-            padding: 8px 16px; background-color: #555; color: white;
-            text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.9rem;
-            z-index: 10;
-        }
-
-        /* 表のスクロール対応 */
-        .table-section {
-            width: 100%; 
-            overflow-x: auto; /* 横スクロールを有効化 */
-            -webkit-overflow-scrolling: touch; /* iOSのスクロールを滑らかに */
-            margin-bottom: 20px;
-            background: white; border: 1px solid #ccc; border-radius: 8px;
-        }
-        .sample-table {
-            width: 100%; border-collapse: collapse; font-size: 0.85rem;
-            min-width: 600px; /* スマホでスクロールさせるための最小幅 */
-        }
-        .sample-table th, .sample-table td {
-            border: 1px solid #ddd; padding: 10px; text-align: center;
-            word-break: break-all;
-        }
-        .sample-table th { background-color: #f2f2f2; font-weight: bold; }
-        .sample-table tr:nth-child(even) { background-color: #fafafa; }
-
-        /* 入力エリア */
-        .workspace-outer {
-            background: var(--panel-bg); border: 3px solid #333; border-radius: 15px;
-            padding: 20px; margin-bottom: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            text-align: left;
-        }
-        .guide-msg { font-size: 0.85rem; color: #d32f2f; font-weight: bold; margin-bottom: 10px; }
-        
-        .main-input-zone {
-            width: 100%; min-height: 140px; border: none; font-size: 1.2rem; line-height: 1.8;
-            resize: none; outline: none; font-family: inherit; box-sizing: border-box;
-            background-image: radial-gradient(#ddd 1px, transparent 1px); background-size: 24px 24px;
+            --ink:       #1a1a2e;
+            --paper:     #fdf8f0;
+            --panel:     #ffffff;
+            --red:       #c0392b;
+            --red-light: #fdecea;
+            --blue:      #1a5276;
+            --blue-mid:  #2e86c1;
+            --blue-light:#ebf5fb;
+            --gold:      #b7860b;
+            --gold-light:#fef9e7;
+            --border:    #d5c9b8;
+            --shadow:    rgba(26,26,46,0.10);
+            --radius:    14px;
         }
 
-        /* 述語エリア */
-        .predicate-container {
-            display: flex; justify-content: flex-end; align-items: center; gap: 10px; width: 100%;
-            margin-top: 10px;
-        }
-        .predicate-label { font-weight: bold; font-size: 1.1rem; }
-        .predicate-select {
-            width: 170px; height: 48px; border: 2px solid var(--accent);
-            border-radius: 10px; font-size: 1.1rem; font-weight: bold;
-            text-align: center; background: #e3f2fd; color: #2196F3;
-            -webkit-appearance: none; /* iOS標準デザインをリセット */
-        }
-        
-        /* 戻るボタンは削除しました */
-    </style>
+```
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+        font-family: 'Noto Sans JP', sans-serif;
+        background: var(--paper);
+        background-image:
+            repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(180,160,120,0.12) 39px, rgba(180,160,120,0.12) 40px),
+            repeating-linear-gradient(180deg, transparent, transparent 39px, rgba(180,160,120,0.12) 39px, rgba(180,160,120,0.12) 40px);
+        min-height: 100vh;
+        padding: 16px 12px 40px;
+        color: var(--ink);
+    }
+
+    /* ── HEADER ── */
+    .header {
+        display: flex; align-items: center; justify-content: space-between;
+        max-width: 820px; margin: 0 auto 20px;
+    }
+    .header-title {
+        font-family: 'Kaisei Decol', serif;
+        font-size: clamp(1.3rem, 4vw, 1.9rem);
+        color: var(--blue);
+        letter-spacing: .08em;
+        display: flex; align-items: center; gap: 10px;
+    }
+    .header-title .stamp {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 40px; height: 40px; border-radius: 50%;
+        background: var(--red); color: #fff;
+        font-size: 1.2rem; flex-shrink: 0;
+        box-shadow: 0 2px 6px rgba(192,57,43,.35);
+    }
+    .top-btn {
+        padding: 8px 18px;
+        background: var(--ink); color: #fff;
+        text-decoration: none; border-radius: 8px;
+        font-size: 0.82rem; font-weight: 700;
+        letter-spacing: .05em;
+        transition: background .2s, transform .15s;
+        white-space: nowrap;
+    }
+    .top-btn:hover { background: var(--blue); transform: translateY(-1px); }
+
+    /* ── CONTAINER ── */
+    .container { max-width: 820px; margin: 0 auto; }
+
+    /* ── STATUS BAR ── */
+    .status-bar {
+        display: flex; align-items: center; gap: 8px;
+        font-size: 0.8rem; color: #888;
+        margin-bottom: 10px; min-height: 22px;
+    }
+    .status-dot {
+        width: 8px; height: 8px; border-radius: 50%;
+        background: #ccc; flex-shrink: 0;
+        transition: background .4s;
+    }
+    .status-dot.loading { background: var(--gold); animation: pulse 1s infinite; }
+    .status-dot.ok      { background: #27ae60; }
+    .status-dot.error   { background: var(--red); }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+    /* ── TABLE CARD ── */
+    .table-card {
+        background: var(--panel);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: 0 2px 12px var(--shadow);
+        overflow: hidden;
+        margin-bottom: 18px;
+    }
+    .table-card-header {
+        display: flex; align-items: center; gap: 8px;
+        padding: 10px 16px;
+        background: var(--blue);
+        color: #fff;
+        font-size: 0.82rem; font-weight: 700; letter-spacing: .08em;
+    }
+    .table-card-header .icon { font-size: 1rem; }
+    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+    .sample-table {
+        width: 100%; border-collapse: collapse;
+        font-size: 0.84rem; min-width: 560px;
+    }
+    .sample-table thead th {
+        background: var(--blue-light);
+        color: var(--blue);
+        font-weight: 700; padding: 10px 14px;
+        text-align: center; border-bottom: 2px solid #bcd6ea;
+        white-space: nowrap;
+    }
+    .sample-table tbody td {
+        padding: 9px 14px; text-align: center;
+        border-bottom: 1px solid #ede8df;
+        vertical-align: middle; line-height: 1.6;
+    }
+    .sample-table tbody tr:last-child td { border-bottom: none; }
+    .sample-table tbody tr:nth-child(even) { background: #faf6f0; }
+    .sample-table tbody tr { transition: background .15s; }
+    .sample-table tbody tr:hover { background: var(--gold-light); }
+
+    /* skeleton rows while loading */
+    .skeleton td {
+        height: 38px;
+        background: linear-gradient(90deg, #ede8df 25%, #f5f0e8 50%, #ede8df 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.4s infinite;
+    }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+    /* ── WORKSPACE ── */
+    .workspace-card {
+        background: var(--panel);
+        border: 2px solid var(--ink);
+        border-radius: var(--radius);
+        box-shadow: 4px 4px 0 var(--ink);
+        padding: 20px 20px 14px;
+        margin-bottom: 14px;
+        position: relative;
+        transition: box-shadow .2s;
+    }
+    .workspace-card:focus-within {
+        box-shadow: 4px 4px 0 var(--blue);
+        border-color: var(--blue);
+    }
+
+    .guide-msg {
+        display: flex; align-items: center; gap: 6px;
+        font-size: 0.8rem; color: var(--red);
+        font-weight: 700; margin-bottom: 12px;
+        padding: 6px 10px;
+        background: var(--red-light);
+        border-left: 3px solid var(--red);
+        border-radius: 4px;
+    }
+
+    .main-input-zone {
+        width: 100%;
+        min-height: 140px;
+        border: none; outline: none; resize: none;
+        font-size: 1.15rem; line-height: 2;
+        font-family: 'Noto Sans JP', sans-serif;
+        color: var(--ink);
+        background: transparent;
+        /* horizontal ruled lines */
+        background-image: repeating-linear-gradient(
+            transparent, transparent calc(2em - 1px),
+            #d5c9b8 calc(2em - 1px),
+            #d5c9b8 2em
+        );
+        background-attachment: local;
+        padding: 0 4px;
+    }
+    .main-input-zone::placeholder { color: #c2b89a; }
+
+    .char-count {
+        text-align: right; font-size: 0.72rem;
+        color: #aaa; margin-top: 6px;
+        letter-spacing: .04em;
+    }
+    .char-count.warn { color: var(--gold); }
+
+    /* ── TOOLBAR ── */
+    .toolbar {
+        display: flex; align-items: center; justify-content: space-between;
+        flex-wrap: wrap; gap: 10px;
+        margin-bottom: 10px;
+    }
+    .predicate-group {
+        display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    }
+    .predicate-label {
+        font-weight: 700; font-size: 0.95rem;
+        color: var(--ink);
+    }
+    .predicate-select {
+        height: 44px; padding: 0 14px;
+        border: 2px solid var(--blue-mid);
+        border-radius: 10px;
+        font-size: 1rem; font-weight: 700;
+        font-family: 'Noto Sans JP', sans-serif;
+        color: var(--blue);
+        background: var(--blue-light);
+        -webkit-appearance: none; appearance: none;
+        cursor: pointer; outline: none;
+        transition: border-color .2s, background .2s;
+        min-width: 130px;
+    }
+    .predicate-select:focus { border-color: var(--blue); background: #d6eaf8; }
+    .period { font-size: 1.6rem; font-weight: 900; line-height: 1; color: var(--ink); }
+
+    /* action buttons */
+    .action-group { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn {
+        display: inline-flex; align-items: center; gap: 5px;
+        padding: 9px 16px; border-radius: 9px;
+        font-size: 0.82rem; font-weight: 700; font-family: inherit;
+        cursor: pointer; border: 2px solid transparent;
+        transition: all .18s; letter-spacing: .04em;
+    }
+    .btn-clear {
+        background: #fff; color: var(--ink);
+        border-color: var(--border);
+    }
+    .btn-clear:hover { background: var(--red-light); border-color: var(--red); color: var(--red); }
+    .btn-copy {
+        background: var(--ink); color: #fff;
+        border-color: var(--ink);
+    }
+    .btn-copy:hover { background: var(--blue); border-color: var(--blue); }
+    .btn-copy.copied { background: #27ae60; border-color: #27ae60; }
+
+    /* ── ERROR STATE ── */
+    .error-box {
+        background: var(--red-light); border: 1.5px solid #e74c3c;
+        border-radius: 10px; padding: 14px 18px;
+        font-size: 0.85rem; color: #922b21;
+        display: none; align-items: flex-start; gap: 10px;
+        margin-bottom: 14px;
+    }
+    .error-box.visible { display: flex; }
+    .error-box .retry-btn {
+        margin-left: auto; flex-shrink: 0;
+        padding: 5px 12px; background: var(--red); color: #fff;
+        border: none; border-radius: 6px; cursor: pointer;
+        font-size: 0.8rem; font-weight: 700; font-family: inherit;
+        transition: background .2s;
+    }
+    .error-box .retry-btn:hover { background: #922b21; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 500px) {
+        .toolbar { flex-direction: column; align-items: flex-start; }
+        .action-group { width: 100%; justify-content: flex-end; }
+    }
+</style>
+```
+
 </head>
 <body>
 
-<div class="container">
-    <a href="index.html" class="top-btn">Topへ</a>
+<div class="header">
+    <h1 class="header-title">
+        <span class="stamp">文</span>
+        作文トレーニング
+    </h1>
+    <a href="index.html" class="top-btn">← Top</a>
+</div>
 
-    <div class="table-section">
+<div class="container">
+
+```
+<!-- status -->
+<div class="status-bar">
+    <div class="status-dot loading" id="status-dot"></div>
+    <span id="status-text">データを読み込み中…</span>
+</div>
+
+<!-- error -->
+<div class="error-box" id="error-box">
+    <span>⚠️ データの読み込みに失敗しました。ネットワーク接続を確認してください。</span>
+    <button class="retry-btn" onclick="init()">再試行</button>
+</div>
+
+<!-- table -->
+<div class="table-card">
+    <div class="table-card-header">
+        <span class="icon">📋</span> 参考例文・単語リスト
+    </div>
+    <div class="table-scroll">
         <table class="sample-table">
             <thead id="table-header"></thead>
-            <tbody id="table-body"></tbody>
+            <tbody id="table-body">
+                <!-- skeleton -->
+                <tr class="skeleton"><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr class="skeleton"><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr class="skeleton"><td></td><td></td><td></td><td></td><td></td></tr>
+            </tbody>
         </table>
     </div>
+</div>
 
-    <div class="workspace-outer">
-        <div class="guide-msg">＿には助詞を入れて読みましょう。</div>
-        <textarea class="main-input-zone" placeholder="ここに文章を入力してください..."></textarea>
+<!-- workspace -->
+<div class="workspace-card">
+    <div class="guide-msg">
+        ✏️ ＿には助詞を入れて読みましょう。
     </div>
+    <textarea
+        class="main-input-zone"
+        id="main-textarea"
+        placeholder="ここに文章を入力してください…"
+        maxlength="500"
+    ></textarea>
+    <div class="char-count" id="char-count">0 / 500 文字</div>
+</div>
 
-    <div class="predicate-container">
+<!-- toolbar -->
+<div class="toolbar">
+    <div class="predicate-group">
         <span class="predicate-label">＋ 述語</span>
         <select id="predicate-roll" class="predicate-select">
-            <option value="">(読み込み中...)</option>
+            <option value="">(読み込み中…)</option>
         </select>
-        <span style="font-size: 1.5rem; font-weight: bold;">。</span>
+        <span class="period">。</span>
     </div>
+    <div class="action-group">
+        <button class="btn btn-clear" id="btn-clear" onclick="clearText()">🗑 クリア</button>
+        <button class="btn btn-copy" id="btn-copy" onclick="copyText()">📋 コピー</button>
+    </div>
+</div>
+```
+
 </div>
 
 <script>
     const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTDRPlyoBQrG9wzUadhnR8OY9sxuPhkRRpO_WO0BNs-H_f349__5bK5vN6ZYb3U_w/pub?gid=1136664882&single=true&output=csv";
 
-    async function init() {
+    const statusDot  = document.getElementById('status-dot');
+    const statusText = document.getElementById('status-text');
+    const errorBox   = document.getElementById('error-box');
+    const textarea   = document.getElementById('main-textarea');
+    const charCount  = document.getElementById('char-count');
+
+    /* ── Character counter ── */
+    textarea.addEventListener('input', () => {
+        const len = textarea.value.length;
+        const max = parseInt(textarea.maxLength);
+        charCount.textContent = `${len} / ${max} 文字`;
+        charCount.classList.toggle('warn', len > max * 0.8);
+    });
+
+    /* ── Clear ── */
+    function clearText() {
+        textarea.value = '';
+        textarea.dispatchEvent(new Event('input'));
+        textarea.focus();
+    }
+
+    /* ── Copy full sentence ── */
+    async function copyText() {
+        const predicate = document.getElementById('predicate-roll').value;
+        const body = textarea.value.trim();
+        if (!body && !predicate) return;
+
+        const sentence = predicate ? `${body}${predicate}。` : body;
         try {
-            const response = await fetch(CSV_URL);
-            const text = await response.text();
-            // 行ごとに分割。空行は除外
-            const rows = text.split(/\r?\n/).filter(r => r.trim() !== "").map(r => r.split(','));
-            
-            if (rows.length > 0) {
-                renderTable(rows);
-                renderPredicate(rows);
-            }
+            await navigator.clipboard.writeText(sentence);
+        } catch (e) {
+            // fallback
+            const el = document.createElement('textarea');
+            el.value = sentence;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+        }
+
+        const btn = document.getElementById('btn-copy');
+        btn.textContent = '✓ コピーしました';
+        btn.classList.add('copied');
+        setTimeout(() => {
+            btn.innerHTML = '📋 コピー';
+            btn.classList.remove('copied');
+        }, 2000);
+    }
+
+    /* ── CSV fetch ── */
+    async function init() {
+        setStatus('loading', 'データを読み込み中…');
+        errorBox.classList.remove('visible');
+
+        try {
+            const res = await fetch(CSV_URL);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const text = await res.text();
+            const rows = text
+                .split(/\r?\n/)
+                .filter(r => r.trim() !== '')
+                .map(r => r.split(','));
+
+            if (rows.length === 0) throw new Error('Empty CSV');
+
+            renderTable(rows);
+            renderPredicate(rows);
+            setStatus('ok', `読み込み完了（${rows.length - 1} 行）`);
         } catch (e) {
             console.error(e);
+            setStatus('error', '読み込み失敗');
+            errorBox.classList.add('visible');
+            // clear skeleton
+            document.getElementById('table-body').innerHTML =
+                '<tr><td colspan="5" style="padding:20px;color:#aaa;font-size:.85rem;">データを取得できませんでした</td></tr>';
+            document.getElementById('predicate-roll').innerHTML =
+                '<option value="">(取得失敗)</option>';
         }
+    }
+
+    function setStatus(state, msg) {
+        statusDot.className = 'status-dot ' + state;
+        statusText.textContent = msg;
     }
 
     function renderTable(rows) {
-        const headerTarget = document.getElementById('table-header');
-        const bodyTarget = document.getElementById('table-body');
-        
+        const hEl = document.getElementById('table-header');
+        const bEl = document.getElementById('table-body');
         const headers = rows[0];
-        // ヘッダー生成（A-E列固定）
-        let hHtml = "<tr>";
-        for (let i = 0; i < 5; i++) {
-            hHtml += `<th>${headers && headers[i] !== undefined ? headers[i] : ""}</th>`;
-        }
-        hHtml += "</tr>";
-        headerTarget.innerHTML = hHtml;
 
-        // データ生成（2行目〜6行目 A-E列固定）
-        let bHtml = "";
-        for (let r = 1; r < 6; r++) {
-            bHtml += "<tr>";
+        let hHtml = '<tr>';
+        for (let i = 0; i < 5; i++) {
+            hHtml += `<th>${(headers && headers[i]) ? headers[i] : ''}</th>`;
+        }
+        hHtml += '</tr>';
+        hEl.innerHTML = hHtml;
+
+        let bHtml = '';
+        for (let r = 1; r < Math.min(rows.length, 6); r++) {
+            bHtml += '<tr>';
             for (let c = 0; c < 5; c++) {
-                const val = (rows[r] && rows[r][c] !== undefined) ? rows[r][c] : "";
+                const val = (rows[r] && rows[r][c] !== undefined) ? rows[r][c] : '';
                 bHtml += `<td>${val}</td>`;
             }
-            bHtml += "</tr>";
+            bHtml += '</tr>';
         }
-        bodyTarget.innerHTML = bHtml;
+        bEl.innerHTML = bHtml;
     }
 
     function renderPredicate(rows) {
-        const selectF = document.getElementById('predicate-roll');
+        const sel = document.getElementById('predicate-roll');
         const headers = rows[0];
-        // F列（index 5）
-        const fWords = rows.slice(1).map(r => r[5]).filter(w => w !== undefined && w.trim() !== "");
-        const label = headers && headers[5] ? headers[5].trim() : "述語";
-        
-        selectF.innerHTML = `<option value="">(${label})</option>`;
-        fWords.forEach(w => {
+        const label = (headers && headers[5]) ? headers[5].trim() : '述語';
+        const words = rows.slice(1)
+            .map(r => r[5])
+            .filter(w => w !== undefined && w.trim() !== '');
+
+        sel.innerHTML = `<option value="">(${label}を選ぶ)</option>`;
+        words.forEach(w => {
             const opt = document.createElement('option');
-            opt.value = w; opt.innerText = w;
-            selectF.appendChild(opt);
+            opt.value = w.trim();
+            opt.textContent = w.trim();
+            sel.appendChild(opt);
         });
     }
 
