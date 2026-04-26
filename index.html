@@ -1,87 +1,244 @@
 <!DOCTYPE html>
+
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>日本語トレーニング</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Kaisei+Decol:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* 全体のレイアウト */
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background-color: #f5f7fa;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            color: #333;
+        :root {
+            --ink:        #1a1a2e;
+            --paper:      #fdf8f0;
+            --red:        #c0392b;
+            --red-light:  #fdecea;
+            --blue:       #1a5276;
+            --blue-mid:   #2e86c1;
+            --blue-light: #ebf5fb;
+            --gold:       #b7860b;
+            --gold-light: #fef9e7;
+            --border:     #d5c9b8;
+            --shadow:     rgba(26,26,46,0.12);
         }
 
-        h1 {
-            margin-bottom: 40px;
-            font-size: 1.8rem;
-            color: #2c3e50;
-        }
+```
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* ボタンのコンテナ */
-        .btn-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            width: 80%;
-            max-width: 300px;
-        }
+    body {
+        font-family: 'Noto Sans JP', sans-serif;
+        background: var(--paper);
+        background-image:
+            repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(180,160,120,0.13) 39px, rgba(180,160,120,0.13) 40px),
+            repeating-linear-gradient(180deg, transparent, transparent 39px, rgba(180,160,120,0.13) 39px, rgba(180,160,120,0.13) 40px);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 32px 20px;
+        color: var(--ink);
+    }
 
-        /* ボタンの基本デザイン */
-        .btn {
-            display: block;
-            padding: 20px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            text-align: center;
-            text-decoration: none;
-            color: white;
-            border-radius: 15px;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
+    /* ── DECORATIVE KANJI BACKGROUND ── */
+    .bg-kanji {
+        position: fixed; inset: 0;
+        display: flex; align-items: center; justify-content: center;
+        pointer-events: none; z-index: 0;
+        overflow: hidden;
+    }
+    .bg-kanji span {
+        font-family: 'Kaisei Decol', serif;
+        font-size: clamp(220px, 40vw, 420px);
+        font-weight: 700;
+        color: rgba(26,82,118,0.04);
+        user-select: none;
+        line-height: 1;
+        letter-spacing: -.02em;
+    }
 
-        .btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 3px rgba(0,0,0,0.1);
-        }
+    /* ── MAIN WRAPPER ── */
+    .wrapper {
+        position: relative; z-index: 1;
+        display: flex; flex-direction: column;
+        align-items: center;
+        width: 100%; max-width: 420px;
+        animation: fadeUp .6s ease both;
+    }
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(22px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
 
-        /* 助詞ボタンの色（ピンク系） */
-        .btn-particle {
-            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
-        }
+    /* ── LOGO / TITLE ── */
+    .logo-ring {
+        width: 72px; height: 72px;
+        border-radius: 50%;
+        background: var(--blue);
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 4px 18px rgba(26,82,118,.35), 0 0 0 6px rgba(26,82,118,.10);
+        margin-bottom: 18px;
+        animation: fadeUp .6s ease .1s both;
+    }
+    .logo-ring span {
+        font-family: 'Kaisei Decol', serif;
+        font-size: 2rem; color: #fff; line-height: 1;
+    }
 
-        /* 作文ボタンの色（ブルー系） */
-        .btn-composition {
-            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
-            color: #333; /* 文字色を濃くして読みやすく */
-        }
+    h1 {
+        font-family: 'Kaisei Decol', serif;
+        font-size: clamp(1.5rem, 5vw, 2rem);
+        color: var(--blue);
+        letter-spacing: .12em;
+        text-align: center;
+        margin-bottom: 6px;
+        animation: fadeUp .6s ease .15s both;
+    }
+    .subtitle {
+        font-size: 0.78rem;
+        color: #9b8e7a;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+        margin-bottom: 44px;
+        animation: fadeUp .6s ease .2s both;
+    }
 
-        .footer {
-            margin-top: 50px;
-            font-size: 0.8rem;
-            color: #95a5a6;
-        }
-    </style>
+    /* ── NAV CARDS ── */
+    .nav-cards {
+        display: flex; flex-direction: column;
+        gap: 16px; width: 100%;
+    }
+
+    .nav-card {
+        display: flex; align-items: center; gap: 18px;
+        padding: 22px 24px;
+        text-decoration: none;
+        border-radius: 16px;
+        border: 2px solid var(--ink);
+        background: var(--paper);
+        box-shadow: 4px 4px 0 var(--ink);
+        color: var(--ink);
+        transition: transform .18s, box-shadow .18s, background .18s;
+        position: relative; overflow: hidden;
+    }
+    .nav-card::before {
+        content: '';
+        position: absolute; inset: 0;
+        opacity: 0;
+        transition: opacity .22s;
+    }
+    .nav-card:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0 var(--ink);
+    }
+    .nav-card:active {
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0 var(--ink);
+    }
+
+    /* card colour variants */
+    .nav-card.particle { border-color: var(--red); box-shadow: 4px 4px 0 var(--red); }
+    .nav-card.particle:hover { box-shadow: 6px 6px 0 var(--red); }
+    .nav-card.particle:active { box-shadow: 2px 2px 0 var(--red); }
+    .nav-card.particle::before { background: var(--red-light); }
+    .nav-card.particle:hover::before { opacity: 1; }
+
+    .nav-card.composition { border-color: var(--blue); box-shadow: 4px 4px 0 var(--blue); }
+    .nav-card.composition:hover { box-shadow: 6px 6px 0 var(--blue); }
+    .nav-card.composition:active { box-shadow: 2px 2px 0 var(--blue); }
+    .nav-card.composition::before { background: var(--blue-light); }
+    .nav-card.composition:hover::before { opacity: 1; }
+
+    .card-icon {
+        flex-shrink: 0;
+        width: 52px; height: 52px;
+        border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.6rem;
+        position: relative; z-index: 1;
+    }
+    .particle .card-icon  { background: var(--red-light);  }
+    .composition .card-icon { background: var(--blue-light); }
+
+    .card-text { position: relative; z-index: 1; }
+    .card-title {
+        font-family: 'Kaisei Decol', serif;
+        font-size: 1.15rem; font-weight: 700;
+        letter-spacing: .06em;
+        margin-bottom: 3px;
+    }
+    .particle .card-title    { color: var(--red); }
+    .composition .card-title { color: var(--blue); }
+
+    .card-desc {
+        font-size: 0.76rem; color: #7a6f62;
+        letter-spacing: .04em; line-height: 1.5;
+    }
+
+    .card-arrow {
+        margin-left: auto; flex-shrink: 0;
+        font-size: 1.2rem; color: #ccc;
+        position: relative; z-index: 1;
+        transition: transform .18s, color .18s;
+    }
+    .nav-card:hover .card-arrow { transform: translateX(4px); color: var(--ink); }
+
+    /* ── STAGGER ANIMATION ── */
+    .nav-card:nth-child(1) { animation: fadeUp .6s ease .28s both; }
+    .nav-card:nth-child(2) { animation: fadeUp .6s ease .38s both; }
+
+    /* ── FOOTER ── */
+    footer {
+        margin-top: 48px;
+        font-size: 0.72rem;
+        color: #b0a090;
+        letter-spacing: .08em;
+        animation: fadeUp .6s ease .5s both;
+        position: relative; z-index: 1;
+    }
+</style>
+```
+
 </head>
 <body>
 
-    <h1>日本語トレーニング</h1>
+<!-- giant decorative kanji -->
 
-    <div class="btn-container">
-        <a href="particle.html" class="btn btn-particle">助詞ボタン</a>
-        
-        <a href="composition.html" class="btn btn-composition">作文ボタン</a>
-    </div>
+<div class="bg-kanji"><span>語</span></div>
 
-    <div class="footer">© 2024 日本語学習サポート</div>
+<div class="wrapper">
+
+```
+<div class="logo-ring"><span>日</span></div>
+<h1>日本語トレーニング</h1>
+<p class="subtitle">Japanese Language Training</p>
+
+<div class="nav-cards">
+
+    <a href="particle.html" class="nav-card particle">
+        <div class="card-icon">🔤</div>
+        <div class="card-text">
+            <div class="card-title">助詞トレーニング</div>
+            <div class="card-desc">助詞の使い方を練習しよう</div>
+        </div>
+        <span class="card-arrow">›</span>
+    </a>
+
+    <a href="composition.html" class="nav-card composition">
+        <div class="card-icon">✏️</div>
+        <div class="card-text">
+            <div class="card-title">作文トレーニング</div>
+            <div class="card-desc">文章を組み立てて書いてみよう</div>
+        </div>
+        <span class="card-arrow">›</span>
+    </a>
+
+</div>
+```
+
+</div>
+
+<footer>© 2024 日本語学習サポート</footer>
 
 </body>
 </html>
