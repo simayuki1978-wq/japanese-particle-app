@@ -366,7 +366,7 @@ body {
 
 <div class="result-row" id="result"></div>
 
-<div>
+<div id="explain-wrap" style="display:none;">
     <span class="explain-toggle" id="explain-toggle" onclick="toggleExplanation()">💡 解説を見る</span>
 </div>
 <div class="explanation" id="explanation"></div>
@@ -437,6 +437,8 @@ function load() {
     document.getElementById('result').className = 'result-row';
     const expEl = document.getElementById('explanation');
     expEl.classList.remove('visible');
+    expEl.innerHTML = '';
+    document.getElementById('explain-wrap').style.display = 'none';
     document.getElementById('explain-toggle').textContent = '💡 解説を見る';
 
     answered = false;
@@ -497,6 +499,7 @@ function selectAnswer(p, btn) {
                 🇻🇳 ${e.vi}
             </div>
         </div>`;
+    document.getElementById('explain-wrap').style.display = 'block';
     document.getElementById('score-correct').textContent = correct;
     document.getElementById('score-wrong').textContent = wrong;
 }
