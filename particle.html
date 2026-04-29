@@ -352,7 +352,7 @@ body {
 <!-- CARD -->
 
 <div class="card">
-    <div class="question-label">空欄に助詞を入れてください</div>
+    <div class="question-label">ここに助詞を入れてください</div>
     <div class="question" id="question"></div>
 
 ```
@@ -439,7 +439,7 @@ function load() {
     expEl.classList.remove('visible');
     expEl.innerHTML = '';
     document.getElementById('explain-wrap').style.display = 'none';
-    document.getElementById('explain-toggle').textContent = '💡 解説を見る';
+    document.getElementById('explain-toggle').textContent = '💡 ヒントを見る';
 
     answered = false;
     document.querySelectorAll('.choice').forEach(b => {
