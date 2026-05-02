@@ -170,7 +170,7 @@ body {
 
 /* ── CHOICE BUTTONS ── */
 .buttons {
-    display: grid; grid-template-columns: repeat(5,1fr);
+    display: grid; grid-template-columns: repeat(4,1fr);
     gap: 8px; margin-bottom: 18px;
 }
 .choice {
@@ -352,12 +352,11 @@ body {
 <!-- CARD -->
 
 <div class="card">
-    <div class="question-label">ここに助詞を入れてください</div>
+    <div class="question-label">空欄に助詞を入れてください</div>
     <div class="question" id="question"></div>
 
 ```
 <div class="buttons" id="buttons">
-    <button class="choice" data-p="は">は</button>
     <button class="choice" data-p="が">が</button>
     <button class="choice" data-p="を">を</button>
     <button class="choice" data-p="に">に</button>
@@ -393,16 +392,14 @@ const questions = [
 { sentence:"猫___寝ている",answer:"が"}, { sentence:"犬___走っている",answer:"が"}, { sentence:"雨___降っている",answer:"が"}, { sentence:"風___吹いている",answer:"が"}, { sentence:"子供___遊んでいる",answer:"が"}, { sentence:"先生___来た",answer:"が"}, { sentence:"友達___笑っている",answer:"が"}, { sentence:"鳥___飛んでいる",answer:"が"}, { sentence:"電車___来る",answer:"が"}, { sentence:"音___聞こえる",answer:"が"}, { sentence:"誰___来た？",answer:"が"}, { sentence:"何___落ちた？",answer:"が"}, { sentence:"雪___降っている",answer:"が"}, { sentence:"水___流れている",answer:"が"}, { sentence:"人___集まっている",answer:"が"}, { sentence:"赤ちゃん___泣いている",answer:"が"}, { sentence:"電話___鳴っている",answer:"が"}, { sentence:"ドア___開いた",answer:"が"}, { sentence:"星___光っている",answer:"が"}, { sentence:"雲___動いている",answer:"が"},
 { sentence:"水___飲む",answer:"を"}, { sentence:"ご飯___食べる",answer:"を"}, { sentence:"本___読む",answer:"を"}, { sentence:"映画___見る",answer:"を"}, { sentence:"音楽___聞く",answer:"を"}, { sentence:"手紙___書く",answer:"を"}, { sentence:"写真___撮る",answer:"を"}, { sentence:"テレビ___見る",answer:"を"}, { sentence:"靴___履く",answer:"を"}, { sentence:"ドア___閉める",answer:"を"}, { sentence:"窓___開ける",answer:"を"}, { sentence:"名前___書く",answer:"を"}, { sentence:"パン___買う",answer:"を"}, { sentence:"コーヒー___飲む",answer:"を"}, { sentence:"荷物___持つ",answer:"を"}, { sentence:"かばん___持つ",answer:"を"}, { sentence:"鍵___探す",answer:"を"}, { sentence:"車___洗う",answer:"を"}, { sentence:"顔___洗う",answer:"を"}, { sentence:"道___歩く",answer:"を"},
 { sentence:"学校___行く",answer:"に"}, { sentence:"家___帰る",answer:"に"}, { sentence:"駅___行く",answer:"に"}, { sentence:"東京___行く",answer:"に"}, { sentence:"友達___会う",answer:"に"}, { sentence:"先生___聞く",answer:"に"}, { sentence:"店___行く",answer:"に"}, { sentence:"部屋___入る",answer:"に"}, { sentence:"外___出る",answer:"に"}, { sentence:"椅子___座る",answer:"に"}, { sentence:"机___置く",answer:"に"}, { sentence:"ここ___来る",answer:"に"}, { sentence:"あそこ___行く",answer:"に"}, { sentence:"友達___電話する",answer:"に"}, { sentence:"人___話す",answer:"に"}, { sentence:"子供___教える",answer:"に"}, { sentence:"会社___行く",answer:"に"}, { sentence:"病院___行く",answer:"に"}, { sentence:"玄関___入る",answer:"に"}, { sentence:"窓___近づく",answer:"に"},
-{ sentence:"公園___遊ぶ",answer:"で"}, { sentence:"学校___勉強する",answer:"で"}, { sentence:"家___食べる",answer:"で"}, { sentence:"図書館___読む",answer:"で"}, { sentence:"店___買う",answer:"で"}, { sentence:"電車___行く",answer:"で"}, { sentence:"バス___行く",answer:"で"}, { sentence:"手___書く",answer:"で"}, { sentence:"日本語___話す",answer:"で"}, { sentence:"ここ___待つ",answer:"で"}, { sentence:"外___遊ぶ",answer:"で"}, { sentence:"会社___働く",answer:"で"}, { sentence:"教室___座る",answer:"で"}, { sentence:"駅___待つ",answer:"で"}, { sentence:"ホテル___泊まる",answer:"で"}, { sentence:"キッチン___料理する",answer:"で"}, { sentence:"パソコン___書く",answer:"で"}, { sentence:"電話___話す",answer:"で"}, { sentence:"庭___遊ぶ",answer:"で"}, { sentence:"海___泳ぐ",answer:"で"},
-{ sentence:"猫___魚が好き",answer:"は"}, { sentence:"この本___面白い",answer:"は"}, { sentence:"日本___食べ物が美味しい",answer:"は"}, { sentence:"夏___暑い",answer:"は"}, { sentence:"冬___寒い",answer:"は"}, { sentence:"ここ___静かだ",answer:"は"}, { sentence:"山___高い",answer:"は"}, { sentence:"空___青い",answer:"は"}, { sentence:"この店___安い",answer:"は"}, { sentence:"この町___人が多い",answer:"は"}, { sentence:"この部屋___広い",answer:"は"}, { sentence:"海___水が冷たい",answer:"は"}, { sentence:"この映画___人気がある",answer:"は"}, { sentence:"この料理___味がいい",answer:"は"}, { sentence:"この道___車が多い",answer:"は"}, { sentence:"夜___星が見える",answer:"は"}, { sentence:"この問題___難しい",answer:"は"}, { sentence:"春___花が咲く",answer:"は"}, { sentence:"秋___葉が落ちる",answer:"は"}, { sentence:"今日は天気___いい",answer:"が"}
+{ sentence:"公園___遊ぶ",answer:"で"}, { sentence:"学校___勉強する",answer:"で"}, { sentence:"家___食べる",answer:"で"}, { sentence:"図書館___読む",answer:"で"}, { sentence:"店___買う",answer:"で"}, { sentence:"電車___行く",answer:"で"}, { sentence:"バス___行く",answer:"で"}, { sentence:"手___書く",answer:"で"}, { sentence:"日本語___話す",answer:"で"}, { sentence:"ここ___待つ",answer:"で"}, { sentence:"外___遊ぶ",answer:"で"}, { sentence:"会社___働く",answer:"で"}, { sentence:"教室___座る",answer:"で"}, { sentence:"駅___待つ",answer:"で"}, { sentence:"ホテル___泊まる",answer:"で"}, { sentence:"キッチン___料理する",answer:"で"}, { sentence:"パソコン___書く",answer:"で"}, { sentence:"電話___話す",answer:"で"}, { sentence:"庭___遊ぶ",answer:"で"}, { sentence:"海___泳ぐ",answer:"で"}
 ];
 
 const explanations = {
     "が": { label:"が",  ja:"主体・主語", en:"Subject / the doer",    vi:"Chủ thể hành động" },
     "を": { label:"を",  ja:"動作の対象", en:"Object of the action",   vi:"Đối tượng của hành động" },
     "に": { label:"に",  ja:"行き先・対象", en:"Destination / target", vi:"Nơi đến / đối tượng" },
-    "で": { label:"で",  ja:"場所・手段",  en:"Place / means",         vi:"Địa điểm / phương tiện" },
-    "は": { label:"は",  ja:"話題・トピック", en:"Topic marker",        vi:"Chủ đề câu nói" }
+    "で": { label:"で",  ja:"場所・手段",  en:"Place / means",         vi:"Địa điểm / phương tiện" }
 };
 
 let deck = [], index = 0, correct = 0, wrong = 0, answered = false;
@@ -439,7 +436,7 @@ function load() {
     expEl.classList.remove('visible');
     expEl.innerHTML = '';
     document.getElementById('explain-wrap').style.display = 'none';
-    document.getElementById('explain-toggle').textContent = '💡 ヒントを見る';
+    document.getElementById('explain-toggle').textContent = '💡 解説を見る';
 
     answered = false;
     document.querySelectorAll('.choice').forEach(b => {
