@@ -770,10 +770,23 @@ document.getElementById('buttons').addEventListener('click', e => {
     </div>`;
   document.getElementById('explain-wrap').style.display = 'block';
 
-  // 正解の文を生成（元の語+助詞 → は形に置き換え）
+  // 正解の文を生成（元の語+助詞 → は形に置き換え、文頭に移動）
   const correctedSentence = q.sentence.replace(el.word, el.topic);
+
+  // は形要素を文頭に移動（すでに文頭にある場合はそのまま）
+  let reorderedSentence;
+  if (correctedSentence.startsWith(el.topic)) {
+    // すでに文頭（例：私は〜）→ そのまま
+    reorderedSentence = correctedSentence;
+  } else {
+    // 文末の「。」を除いた本文からは形要素を取り除き、文頭に付ける
+    const body = correctedSentence.replace('。', '');
+    const rest = body.replace(el.topic, '');
+    reorderedSentence = el.topic + rest + '。';
+  }
+
   // は形をハイライト
-  const htmlSentence = correctedSentence.replace(
+  const htmlSentence = reorderedSentence.replace(
     el.topic,
     `<span class="topic-hl">${el.topic}</span>`
   );
