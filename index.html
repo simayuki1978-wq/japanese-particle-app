@@ -149,6 +149,12 @@
     .nav-card.composition::before { background: var(--blue-light); }
     .nav-card.composition:hover::before { opacity: 1; }
 
+    .nav-card.ha { border-color: #6c3483; box-shadow: 4px 4px 0 #6c3483; }
+    .nav-card.ha:hover { box-shadow: 6px 6px 0 #6c3483; }
+    .nav-card.ha:active { box-shadow: 2px 2px 0 #6c3483; }
+    .nav-card.ha::before { background: #f5eef8; }
+    .nav-card.ha:hover::before { opacity: 1; }
+
     .card-icon {
         flex-shrink: 0;
         width: 52px; height: 52px;
@@ -159,6 +165,7 @@
     }
     .particle .card-icon  { background: var(--red-light);  }
     .composition .card-icon { background: var(--blue-light); }
+    .ha .card-icon { background: #f5eef8; }
 
     .card-text { position: relative; z-index: 1; }
     .card-title {
@@ -169,6 +176,7 @@
     }
     .particle .card-title    { color: var(--red); }
     .composition .card-title { color: var(--blue); }
+    .ha .card-title          { color: #6c3483; }
 
     .card-desc {
         font-size: 0.76rem; color: #7a6f62;
@@ -186,6 +194,7 @@
     /* ── STAGGER ANIMATION ── */
     .nav-card:nth-child(1) { animation: fadeUp .6s ease .28s both; }
     .nav-card:nth-child(2) { animation: fadeUp .6s ease .38s both; }
+    .nav-card:nth-child(3) { animation: fadeUp .6s ease .46s both; }
 
     /* ── FOOTER ── */
     footer {
@@ -228,7 +237,16 @@
         <div class="card-icon">✏️</div>
         <div class="card-text">
             <div class="card-title">作文トレーニング</div>
-            <div class="card-desc">ことばを組み立ててみよう</div>
+            <div class="card-desc">文章を組み立てて書いてみよう</div>
+        </div>
+        <span class="card-arrow">›</span>
+    </a>
+
+    <a href="ha-quiz.html" class="nav-card ha">
+        <div class="card-icon">🟣</div>
+        <div class="card-text">
+            <div class="card-title">「は」トレーニング</div>
+            <div class="card-desc">助詞「は」の使い方を練習しよう</div>
         </div>
         <span class="card-arrow">›</span>
     </a>
