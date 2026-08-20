@@ -21,7 +21,28 @@
             --border:    #d5c9b8;
             --shadow:    rgba(26,26,46,0.10);
             --radius:    14px;
+            --grid-line: rgba(180,160,120,0.12);
         }
+
+        [data-theme="dark"] {
+            --ink:       #f1ece0;
+            --paper:     #17161f;
+            --panel:     #232230;
+            --red:       #e86a5c;
+            --red-light: rgba(232,106,92,0.14);
+            --blue:      #6bb3e0;
+            --blue-mid:  #4a9bd1;
+            --blue-light:rgba(107,179,224,0.14);
+            --gold:      #dcb24a;
+            --gold-light:rgba(220,178,74,0.14);
+            --border:    #423f54;
+            --shadow:    rgba(0,0,0,0.35);
+            --grid-line: rgba(255,255,255,0.045);
+        }
+
+        body { transition: background-color .25s, color .25s; }
+        .big-frame, .word-slot, .slot-input, .predicate-input,
+        .particle-select, .result-card { transition: background-color .25s, border-color .25s, color .25s; }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -29,8 +50,8 @@
             font-family: 'Noto Sans JP', sans-serif;
             background: var(--paper);
             background-image:
-                repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(180,160,120,0.12) 39px, rgba(180,160,120,0.12) 40px),
-                repeating-linear-gradient(180deg, transparent, transparent 39px, rgba(180,160,120,0.12) 39px, rgba(180,160,120,0.12) 40px);
+                repeating-linear-gradient(90deg, transparent, transparent 39px, var(--grid-line) 39px, var(--grid-line) 40px),
+                repeating-linear-gradient(180deg, transparent, transparent 39px, var(--grid-line) 39px, var(--grid-line) 40px);
             min-height: 100vh;
             padding: 16px 12px 48px;
             color: var(--ink);
@@ -65,6 +86,16 @@
             white-space: nowrap;
         }
         .top-btn:hover { background: var(--blue); transform: translateY(-1px); }
+
+        .theme-toggle {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 38px; height: 38px; border-radius: 50%;
+            background: var(--panel); border: 1.5px solid var(--border);
+            cursor: pointer; font-size: 1.05rem;
+            transition: background .2s, transform .15s, border-color .2s;
+        }
+        .theme-toggle:hover { transform: translateY(-1px); border-color: var(--blue); }
+        .header-actions { display: flex; align-items: center; gap: 8px; }
 
         .container { max-width: 820px; margin: 0 auto; }
 
@@ -263,6 +294,13 @@
         }
         .empty-note.visible { display: block; }
     </style>
+    <script>
+        // ページ描画前にテーマを適用（切り替え時のちらつき防止）
+        (function () {
+            const saved = localStorage.getItem('sakubun-theme');
+            if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+        })();
+    </script>
 </head>
 <body>
 
@@ -271,14 +309,17 @@
         <span class="stamp">文</span>
         作文トレーニング
     </h1>
-    <a href="index.html" class="top-btn">← Top</a>
+    <div class="header-actions">
+        <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="ダークモード切り替え">🌙</button>
+        <a href="index.html" class="top-btn">← Top</a>
+    </div>
 </div>
 
 <div class="container">
 
     <div class="rule-banner">
         にほんごの ぶんの ルールは ひとつ。<br>
-        <b>必要な言葉（順番は自由）</b><span class="rule-sep">＋</span><b>述語（かならず さいご）</b>
+        <b>必要な言葉（Choose the word you need. Multiple words can be shuffled. / Chọn những từ bạn cần. Nhiều từ có thể xáo trộn thứ tự.）</b><span class="rule-sep">＋</span><b>述語（Description / Mô tả）</b>
     </div>
 
     <!-- 大枠① 必要な言葉 -->
@@ -444,6 +485,25 @@
     }
 
     renderSlots();
+
+    /* ── ダークモード切り替え ── */
+    function applyThemeIcon() {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        document.getElementById('theme-toggle').textContent = isDark ? '☀️' : '🌙';
+    }
+    function toggleTheme() {
+        const root = document.documentElement;
+        const isDark = root.getAttribute('data-theme') === 'dark';
+        if (isDark) {
+            root.removeAttribute('data-theme');
+            localStorage.setItem('sakubun-theme', 'light');
+        } else {
+            root.setAttribute('data-theme', 'dark');
+            localStorage.setItem('sakubun-theme', 'dark');
+        }
+        applyThemeIcon();
+    }
+    applyThemeIcon();
 </script>
 
 </body>
