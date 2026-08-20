@@ -91,6 +91,7 @@
             box-shadow: 5px 5px 0 var(--ink);
             padding: 18px 18px 20px;
             margin-bottom: 22px;
+            min-width: 0;
         }
         .big-frame.frame-words { border-color: var(--blue); box-shadow: 5px 5px 0 var(--blue); }
         .big-frame.frame-predicate { border-color: var(--gold); box-shadow: 5px 5px 0 var(--gold); }
@@ -126,9 +127,12 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
+            min-width: 0;
         }
         @media (max-width: 520px) {
             .word-slots { grid-template-columns: 1fr; }
+            .big-frame { padding: 14px 12px 16px; }
+            .word-slot { padding: 10px 12px; }
         }
 
         .word-slot {
@@ -137,6 +141,7 @@
             padding: 12px 14px;
             background: #fffdf9;
             transition: order .3s;
+            min-width: 0;
         }
         .word-slot .slot-label {
             font-size: 0.78rem; font-weight: 700; color: var(--ink);
@@ -147,6 +152,7 @@
         .word-slot .slot-samples {
             font-size: 0.74rem; color: #9b8e7a;
             margin-bottom: 8px; line-height: 1.6;
+            overflow-wrap: break-word;
         }
         .word-slot .slot-samples .chip {
             display: inline-block; cursor: pointer;
@@ -156,9 +162,9 @@
         .word-slot .slot-samples .chip:hover { color: var(--blue); border-color: var(--blue); }
         .word-slot .slot-samples .chip:not(:last-child)::after { content: '　'; }
 
-        .slot-row { display: flex; gap: 6px; }
+        .slot-row { display: flex; gap: 6px; min-width: 0; }
         .slot-input {
-            flex: 1; min-width: 0;
+            flex: 1 1 0%; min-width: 0;
             height: 42px; padding: 0 10px;
             border: 1.5px solid var(--border); border-radius: 8px;
             font-family: 'Noto Sans JP', sans-serif; font-size: 0.98rem;
@@ -167,12 +173,17 @@
         }
         .slot-input:focus { border-color: var(--blue); }
         .particle-select {
-            width: 64px; height: 42px;
+            flex: 0 0 auto;
+            width: 58px; height: 42px;
+            padding: 0 4px;
             border: 1.5px solid var(--blue-mid); border-radius: 8px;
-            background: var(--blue-light); color: var(--blue);
-            font-family: 'Noto Sans JP', sans-serif; font-size: 0.95rem; font-weight: 700;
+            background: var(--blue-light) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%231a5276'%3E%3Cpath d='M5.5 7.5l4.5 4.5 4.5-4.5' stroke='%231a5276' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 4px center/12px;
+            background-position: right 4px center;
+            color: var(--blue);
+            font-family: 'Noto Sans JP', sans-serif; font-size: 0.9rem; font-weight: 700;
             text-align: center; text-align-last: center;
             cursor: pointer; outline: none;
+            -webkit-appearance: none; -moz-appearance: none; appearance: none;
         }
 
         /* ── PREDICATE SAMPLES ── */
@@ -311,10 +322,10 @@
     const SLOT_DEFS = [
         { role: 'subject', label: '主語', en: 'subject', samples: ['わたし', 'あなた', 'せんせい'], defaultParticle: 'が' },
         { role: 'object',  label: '目的語', en: 'object',  samples: ['ほん', 'みず', 'えいが'],   defaultParticle: 'を' },
-        { role: 'time',    label: '時',   en: 'time',    samples: ['きょう', 'あした', 'まいあさ'], defaultParticle: '' },
+        { role: 'time',    label: '時',   en: 'time',    samples: ['きょう', 'あした', 'まいあさ'], defaultParticle: 'に' },
         { role: 'place',   label: '場所', en: 'place',   samples: ['がっこう', 'こうえん', 'えき'], defaultParticle: 'で' },
     ];
-    const PARTICLES = ['', 'が', 'を', 'に', 'で'];
+    const PARTICLES = ['', 'が', 'を', 'に', 'へ', 'で', 'と', 'も'];
 
     let slotOrder = SLOT_DEFS.map(s => s.role);
 
