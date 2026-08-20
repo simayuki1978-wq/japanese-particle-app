@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -24,246 +23,235 @@
             --radius:    14px;
         }
 
-```
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-        font-family: 'Noto Sans JP', sans-serif;
-        background: var(--paper);
-        background-image:
-            repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(180,160,120,0.12) 39px, rgba(180,160,120,0.12) 40px),
-            repeating-linear-gradient(180deg, transparent, transparent 39px, rgba(180,160,120,0.12) 39px, rgba(180,160,120,0.12) 40px);
-        min-height: 100vh;
-        padding: 16px 12px 40px;
-        color: var(--ink);
-    }
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: var(--paper);
+            background-image:
+                repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(180,160,120,0.12) 39px, rgba(180,160,120,0.12) 40px),
+                repeating-linear-gradient(180deg, transparent, transparent 39px, rgba(180,160,120,0.12) 39px, rgba(180,160,120,0.12) 40px);
+            min-height: 100vh;
+            padding: 16px 12px 48px;
+            color: var(--ink);
+        }
 
-    /* ── HEADER ── */
-    .header {
-        display: flex; align-items: center; justify-content: space-between;
-        max-width: 820px; margin: 0 auto 20px;
-    }
-    .header-title {
-        font-family: 'Kaisei Decol', serif;
-        font-size: clamp(1.3rem, 4vw, 1.9rem);
-        color: var(--blue);
-        letter-spacing: .08em;
-        display: flex; align-items: center; gap: 10px;
-    }
-    .header-title .stamp {
-        display: inline-flex; align-items: center; justify-content: center;
-        width: 40px; height: 40px; border-radius: 50%;
-        background: var(--red); color: #fff;
-        font-size: 1.2rem; flex-shrink: 0;
-        box-shadow: 0 2px 6px rgba(192,57,43,.35);
-    }
-    .top-btn {
-        padding: 8px 18px;
-        background: var(--ink); color: #fff;
-        text-decoration: none; border-radius: 8px;
-        font-size: 0.82rem; font-weight: 700;
-        letter-spacing: .05em;
-        transition: background .2s, transform .15s;
-        white-space: nowrap;
-    }
-    .top-btn:hover { background: var(--blue); transform: translateY(-1px); }
+        /* ── HEADER ── */
+        .header {
+            display: flex; align-items: center; justify-content: space-between;
+            max-width: 820px; margin: 0 auto 18px;
+        }
+        .header-title {
+            font-family: 'Kaisei Decol', serif;
+            font-size: clamp(1.3rem, 4vw, 1.9rem);
+            color: var(--blue);
+            letter-spacing: .08em;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .header-title .stamp {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 40px; height: 40px; border-radius: 50%;
+            background: var(--red); color: #fff;
+            font-size: 1.2rem; flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(192,57,43,.35);
+        }
+        .top-btn {
+            padding: 8px 18px;
+            background: var(--ink); color: #fff;
+            text-decoration: none; border-radius: 8px;
+            font-size: 0.82rem; font-weight: 700;
+            letter-spacing: .05em;
+            transition: background .2s, transform .15s;
+            white-space: nowrap;
+        }
+        .top-btn:hover { background: var(--blue); transform: translateY(-1px); }
 
-    /* ── CONTAINER ── */
-    .container { max-width: 820px; margin: 0 auto; }
+        .container { max-width: 820px; margin: 0 auto; }
 
-    /* ── STATUS BAR ── */
-    .status-bar {
-        display: flex; align-items: center; gap: 8px;
-        font-size: 0.8rem; color: #888;
-        margin-bottom: 10px; min-height: 22px;
-    }
-    .status-dot {
-        width: 8px; height: 8px; border-radius: 50%;
-        background: #ccc; flex-shrink: 0;
-        transition: background .4s;
-    }
-    .status-dot.loading { background: var(--gold); animation: pulse 1s infinite; }
-    .status-dot.ok      { background: #27ae60; }
-    .status-dot.error   { background: var(--red); }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+        /* ── RULE BANNER ── */
+        .rule-banner {
+            background: var(--panel);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: 0 2px 12px var(--shadow);
+            padding: 14px 18px;
+            margin-bottom: 18px;
+            font-size: 0.86rem;
+            line-height: 1.7;
+            text-align: center;
+        }
+        .rule-banner b { color: var(--blue); }
+        .rule-banner .rule-sep { color: var(--red); font-weight: 900; margin: 0 4px; }
 
-    /* ── TABLE CARD ── */
-    .table-card {
-        background: var(--panel);
-        border: 1.5px solid var(--border);
-        border-radius: var(--radius);
-        box-shadow: 0 2px 12px var(--shadow);
-        overflow: hidden;
-        margin-bottom: 18px;
-    }
-    .table-card-header {
-        display: flex; align-items: center; gap: 8px;
-        padding: 10px 16px;
-        background: var(--blue);
-        color: #fff;
-        font-size: 0.82rem; font-weight: 700; letter-spacing: .08em;
-    }
-    .table-card-header .icon { font-size: 1rem; }
-    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        /* ── FRAME (大枠) ── */
+        .big-frame {
+            border: 2.5px solid var(--ink);
+            border-radius: 18px;
+            background: var(--panel);
+            box-shadow: 5px 5px 0 var(--ink);
+            padding: 18px 18px 20px;
+            margin-bottom: 22px;
+        }
+        .big-frame.frame-words { border-color: var(--blue); box-shadow: 5px 5px 0 var(--blue); }
+        .big-frame.frame-predicate { border-color: var(--gold); box-shadow: 5px 5px 0 var(--gold); }
 
-    .sample-table {
-        width: 100%; border-collapse: collapse;
-        font-size: 0.84rem; min-width: 560px;
-    }
-    .sample-table thead th {
-        background: var(--blue-light);
-        color: var(--blue);
-        font-weight: 700; padding: 10px 14px;
-        text-align: center; border-bottom: 2px solid #bcd6ea;
-        white-space: nowrap;
-    }
-    .sample-table tbody td {
-        padding: 9px 14px; text-align: center;
-        border-bottom: 1px solid #ede8df;
-        vertical-align: middle; line-height: 1.6;
-    }
-    .sample-table tbody tr:last-child td { border-bottom: none; }
-    .sample-table tbody tr:nth-child(even) { background: #faf6f0; }
-    .sample-table tbody tr { transition: background .15s; }
-    .sample-table tbody tr:hover { background: var(--gold-light); }
+        .frame-header {
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 10px;
+            margin-bottom: 14px;
+        }
+        .frame-title {
+            font-family: 'Kaisei Decol', serif;
+            font-size: 1.15rem; font-weight: 700; letter-spacing: .06em;
+        }
+        .frame-words .frame-title { color: var(--blue); }
+        .frame-predicate .frame-title { color: var(--gold); }
 
-    /* skeleton rows while loading */
-    .skeleton td {
-        height: 38px;
-        background: linear-gradient(90deg, #ede8df 25%, #f5f0e8 50%, #ede8df 75%);
-        background-size: 200% 100%;
-        animation: shimmer 1.4s infinite;
-    }
-    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+        .shuffle-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 16px; border-radius: 9px;
+            background: var(--blue); color: #fff;
+            border: none; cursor: pointer;
+            font-family: inherit; font-size: 0.82rem; font-weight: 700;
+            letter-spacing: .04em;
+            transition: background .18s, transform .18s;
+        }
+        .shuffle-btn:hover { background: var(--blue-mid); }
+        .shuffle-btn:active { transform: scale(.97); }
+        .shuffle-btn .icon { display: inline-block; transition: transform .4s; }
+        .shuffle-btn.spinning .icon { transform: rotate(360deg); }
 
-    /* ── WORKSPACE ── */
-    .workspace-card {
-        background: var(--panel);
-        border: 2px solid var(--ink);
-        border-radius: var(--radius);
-        box-shadow: 4px 4px 0 var(--ink);
-        padding: 20px 20px 14px;
-        margin-bottom: 14px;
-        position: relative;
-        transition: box-shadow .2s;
-    }
-    .workspace-card:focus-within {
-        box-shadow: 4px 4px 0 var(--blue);
-        border-color: var(--blue);
-    }
+        /* ── WORD SLOTS ── */
+        .word-slots {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        @media (max-width: 520px) {
+            .word-slots { grid-template-columns: 1fr; }
+        }
 
-    .guide-msg {
-        display: flex; align-items: center; gap: 6px;
-        font-size: 0.8rem; color: var(--red);
-        font-weight: 700; margin-bottom: 12px;
-        padding: 6px 10px;
-        background: var(--red-light);
-        border-left: 3px solid var(--red);
-        border-radius: 4px;
-    }
+        .word-slot {
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 14px;
+            background: #fffdf9;
+            transition: order .3s;
+        }
+        .word-slot .slot-label {
+            font-size: 0.78rem; font-weight: 700; color: var(--ink);
+            display: flex; align-items: center; gap: 6px;
+            margin-bottom: 6px;
+        }
+        .word-slot .slot-label .en { font-weight: 400; color: #9b8e7a; font-size: 0.7rem; }
+        .word-slot .slot-samples {
+            font-size: 0.74rem; color: #9b8e7a;
+            margin-bottom: 8px; line-height: 1.6;
+        }
+        .word-slot .slot-samples .chip {
+            display: inline-block; cursor: pointer;
+            border-bottom: 1px dashed #c2b89a;
+            transition: color .15s, border-color .15s;
+        }
+        .word-slot .slot-samples .chip:hover { color: var(--blue); border-color: var(--blue); }
+        .word-slot .slot-samples .chip:not(:last-child)::after { content: '　'; }
 
-    .main-input-zone {
-        width: 100%;
-        min-height: 140px;
-        border: none; outline: none; resize: none;
-        font-size: 1.15rem; line-height: 2;
-        font-family: 'Noto Sans JP', sans-serif;
-        color: var(--ink);
-        background: transparent;
-        /* horizontal ruled lines */
-        background-image: repeating-linear-gradient(
-            transparent, transparent calc(2em - 1px),
-            #d5c9b8 calc(2em - 1px),
-            #d5c9b8 2em
-        );
-        background-attachment: local;
-        padding: 0 4px;
-    }
-    .main-input-zone::placeholder { color: #c2b89a; }
+        .slot-row { display: flex; gap: 6px; }
+        .slot-input {
+            flex: 1; min-width: 0;
+            height: 42px; padding: 0 10px;
+            border: 1.5px solid var(--border); border-radius: 8px;
+            font-family: 'Noto Sans JP', sans-serif; font-size: 0.98rem;
+            color: var(--ink); background: #fff;
+            outline: none; transition: border-color .18s;
+        }
+        .slot-input:focus { border-color: var(--blue); }
+        .particle-select {
+            width: 64px; height: 42px;
+            border: 1.5px solid var(--blue-mid); border-radius: 8px;
+            background: var(--blue-light); color: var(--blue);
+            font-family: 'Noto Sans JP', sans-serif; font-size: 0.95rem; font-weight: 700;
+            text-align: center; text-align-last: center;
+            cursor: pointer; outline: none;
+        }
 
-    .char-count {
-        text-align: right; font-size: 0.72rem;
-        color: #aaa; margin-top: 6px;
-        letter-spacing: .04em;
-    }
-    .char-count.warn { color: var(--gold); }
+        /* ── PREDICATE SAMPLES ── */
+        .predicate-samples {
+            display: flex; flex-direction: column; gap: 4px;
+            font-size: 0.76rem; color: #9b8e7a;
+            margin-bottom: 10px; line-height: 1.6;
+        }
+        .predicate-samples .cat-label { font-weight: 700; color: #b0a48c; margin-right: 6px; }
+        .predicate-samples .chip {
+            cursor: pointer; border-bottom: 1px dashed #c2b89a;
+            transition: color .15s, border-color .15s;
+        }
+        .predicate-samples .chip:hover { color: var(--gold); border-color: var(--gold); }
+        .predicate-samples .chip:not(:last-child)::after { content: '　'; }
 
-    /* ── TOOLBAR ── */
-    .toolbar {
-        display: flex; align-items: center; justify-content: space-between;
-        flex-wrap: wrap; gap: 10px;
-        margin-bottom: 10px;
-    }
-    .predicate-group {
-        display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-    }
-    .predicate-label {
-        font-weight: 700; font-size: 0.95rem;
-        color: var(--ink);
-    }
-    .predicate-select {
-        height: 44px; padding: 0 14px;
-        border: 2px solid var(--blue-mid);
-        border-radius: 10px;
-        font-size: 1rem; font-weight: 700;
-        font-family: 'Noto Sans JP', sans-serif;
-        color: var(--blue);
-        background: var(--blue-light);
-        -webkit-appearance: none; appearance: none;
-        cursor: pointer; outline: none;
-        transition: border-color .2s, background .2s;
-        min-width: 130px;
-    }
-    .predicate-select:focus { border-color: var(--blue); background: #d6eaf8; }
-    .period { font-size: 1.6rem; font-weight: 900; line-height: 1; color: var(--ink); }
+        .predicate-input {
+            width: 100%; height: 46px; padding: 0 12px;
+            border: 1.5px solid var(--border); border-radius: 9px;
+            font-family: 'Noto Sans JP', sans-serif; font-size: 1.05rem;
+            color: var(--ink); background: #fff;
+            outline: none; transition: border-color .18s;
+        }
+        .predicate-input:focus { border-color: var(--gold); }
 
-    /* action buttons */
-    .action-group { display: flex; gap: 8px; flex-wrap: wrap; }
-    .btn {
-        display: inline-flex; align-items: center; gap: 5px;
-        padding: 9px 16px; border-radius: 9px;
-        font-size: 0.82rem; font-weight: 700; font-family: inherit;
-        cursor: pointer; border: 2px solid transparent;
-        transition: all .18s; letter-spacing: .04em;
-    }
-    .btn-clear {
-        background: #fff; color: var(--ink);
-        border-color: var(--border);
-    }
-    .btn-clear:hover { background: var(--red-light); border-color: var(--red); color: var(--red); }
-    .btn-copy {
-        background: var(--ink); color: #fff;
-        border-color: var(--ink);
-    }
-    .btn-copy:hover { background: var(--blue); border-color: var(--blue); }
-    .btn-copy.copied { background: #27ae60; border-color: #27ae60; }
+        /* ── DECIDE BUTTON ── */
+        .decide-btn {
+            display: block; width: 100%;
+            padding: 16px; border-radius: 12px;
+            background: var(--red); color: #fff;
+            border: 2px solid var(--red);
+            font-family: 'Kaisei Decol', serif;
+            font-size: 1.15rem; font-weight: 700; letter-spacing: .1em;
+            cursor: pointer;
+            box-shadow: 4px 4px 0 var(--ink);
+            transition: transform .15s, box-shadow .15s;
+            margin-bottom: 18px;
+        }
+        .decide-btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+        .decide-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--ink); }
 
-    /* ── ERROR STATE ── */
-    .error-box {
-        background: var(--red-light); border: 1.5px solid #e74c3c;
-        border-radius: 10px; padding: 14px 18px;
-        font-size: 0.85rem; color: #922b21;
-        display: none; align-items: flex-start; gap: 10px;
-        margin-bottom: 14px;
-    }
-    .error-box.visible { display: flex; }
-    .error-box .retry-btn {
-        margin-left: auto; flex-shrink: 0;
-        padding: 5px 12px; background: var(--red); color: #fff;
-        border: none; border-radius: 6px; cursor: pointer;
-        font-size: 0.8rem; font-weight: 700; font-family: inherit;
-        transition: background .2s;
-    }
-    .error-box .retry-btn:hover { background: #922b21; }
+        /* ── RESULT ── */
+        .result-card {
+            background: var(--gold-light);
+            border: 2px solid var(--gold);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .result-card.visible { display: block; animation: popIn .3s ease; }
+        @keyframes popIn { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: scale(1); } }
+        .result-label {
+            font-size: 0.74rem; font-weight: 700; color: var(--gold);
+            letter-spacing: .1em; margin-bottom: 8px;
+        }
+        .result-sentence {
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 1.35rem; line-height: 1.8;
+            color: var(--ink); margin-bottom: 14px;
+            word-break: break-word;
+        }
+        .btn-copy {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 9px 18px; border-radius: 9px;
+            background: var(--ink); color: #fff; border: none;
+            font-family: inherit; font-size: 0.84rem; font-weight: 700;
+            cursor: pointer; transition: background .18s;
+        }
+        .btn-copy:hover { background: var(--blue); }
+        .btn-copy.copied { background: #27ae60; }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 500px) {
-        .toolbar { flex-direction: column; align-items: flex-start; }
-        .action-group { width: 100%; justify-content: flex-end; }
-    }
-</style>
-```
-
+        .empty-note {
+            font-size: 0.78rem; color: var(--red);
+            text-align: center; margin: -8px 0 16px;
+            display: none;
+        }
+        .empty-note.visible { display: block; }
+    </style>
 </head>
 <body>
 
@@ -277,112 +265,164 @@
 
 <div class="container">
 
-```
-<!-- status -->
-<div class="status-bar">
-    <div class="status-dot loading" id="status-dot"></div>
-    <span id="status-text">データを読み込み中…</span>
-</div>
+    <div class="rule-banner">
+        にほんごの ぶんの ルールは ひとつ。<br>
+        <b>必要な言葉（順番は自由）</b><span class="rule-sep">＋</span><b>述語（かならず さいご）</b>
+    </div>
 
-<!-- error -->
-<div class="error-box" id="error-box">
-    <span>⚠️ データの読み込みに失敗しました。ネットワーク接続を確認してください。</span>
-    <button class="retry-btn" onclick="init()">再試行</button>
-</div>
+    <!-- 大枠① 必要な言葉 -->
+    <div class="big-frame frame-words">
+        <div class="frame-header">
+            <span class="frame-title">① 必要な言葉</span>
+            <button class="shuffle-btn" id="shuffle-btn" onclick="shuffleSlots()">
+                <span class="icon">🔀</span> 語順シャッフル
+            </button>
+        </div>
+        <div class="word-slots" id="word-slots"><!-- JSで4枠を生成 --></div>
+    </div>
 
-<!-- table -->
-<div class="table-card">
-    <div class="table-card-header">
-        <span class="icon">📋</span> サンプル単語リスト
+    <!-- 大枠② 述語 -->
+    <div class="big-frame frame-predicate">
+        <div class="frame-header">
+            <span class="frame-title">② 述語（さいごに くる言葉）</span>
+        </div>
+        <div class="predicate-samples">
+            <div><span class="cat-label">動詞</span><span class="chip" onclick="fillPredicate('たべます')">たべます</span><span class="chip" onclick="fillPredicate('いきます')">いきます</span><span class="chip" onclick="fillPredicate('よみます')">よみます</span></div>
+            <div><span class="cat-label">形容詞</span><span class="chip" onclick="fillPredicate('たのしいです')">たのしいです</span><span class="chip" onclick="fillPredicate('しずかです')">しずかです</span><span class="chip" onclick="fillPredicate('おおきいです')">おおきいです</span></div>
+            <div><span class="cat-label">名詞</span><span class="chip" onclick="fillPredicate('がくせいです')">がくせいです</span><span class="chip" onclick="fillPredicate('せんせいです')">せんせいです</span><span class="chip" onclick="fillPredicate('にほんじんです')">にほんじんです</span></div>
+        </div>
+        <input class="predicate-input" id="predicate-input" placeholder="ここに述語を自由に入力（例：たべます）" maxlength="40">
     </div>
-    <div class="table-scroll">
-        <table class="sample-table">
-            <thead id="table-header"></thead>
-            <tbody id="table-body">
-                <!-- skeleton -->
-                <tr class="skeleton"><td></td><td></td><td></td><td></td><td></td></tr>
-                <tr class="skeleton"><td></td><td></td><td></td><td></td><td></td></tr>
-                <tr class="skeleton"><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-        </table>
-    </div>
-</div>
 
-<!-- workspace -->
-<div class="workspace-card">
-    <div class="guide-msg">
-        ✏️ ＿単語を自由にならべて、下の述語をえらびましょう。
-    </div>
-    <textarea
-        class="main-input-zone"
-        id="main-textarea"
-        placeholder="ここに上の単語やあなたが言いたい単語を入力してください。文ができたらだれかにチェックしてもらいましょう。"
-        maxlength="500"
-    ></textarea>
-    <div class="char-count" id="char-count">0 / 500 文字</div>
-</div>
+    <div class="empty-note" id="empty-note">⚠️ 述語を入力してください</div>
 
-<!-- toolbar -->
-<div class="toolbar">
-    <div class="predicate-group">
-        <span class="predicate-label">＋ 述語</span>
-        <select id="predicate-roll" class="predicate-select">
-            <option value="">(読み込み中…)</option>
-        </select>
-        <span class="period">。</span>
+    <button class="decide-btn" onclick="decideSentence()">✅ 決定（文を完成させる）</button>
+
+    <div class="result-card" id="result-card">
+        <div class="result-label">できた文</div>
+        <div class="result-sentence" id="result-sentence"></div>
+        <button class="btn-copy" id="btn-copy" onclick="copyResult()">📋 コピー</button>
     </div>
-    <div class="action-group">
-        <button class="btn btn-clear" id="btn-clear" onclick="clearText()">🗑 クリア</button>
-        <button class="btn btn-copy" id="btn-copy" onclick="copyText()">📋 コピー</button>
-    </div>
-</div>
-```
 
 </div>
 
 <script>
-    const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTDRPlyoBQrG9wzUadhnR8OY9sxuPhkRRpO_WO0BNs-H_f349__5bK5vN6ZYb3U_w/pub?gid=1136664882&single=true&output=csv";
+    /* ── 仮のサンプルデータ（あとで実際のスプレッドシートに差し替え可能） ── */
+    const SLOT_DEFS = [
+        { role: 'subject', label: '主語', en: 'subject', samples: ['わたし', 'あなた', 'せんせい'], defaultParticle: 'が' },
+        { role: 'object',  label: '目的語', en: 'object',  samples: ['ほん', 'みず', 'えいが'],   defaultParticle: 'を' },
+        { role: 'time',    label: '時',   en: 'time',    samples: ['きょう', 'あした', 'まいあさ'], defaultParticle: '' },
+        { role: 'place',   label: '場所', en: 'place',   samples: ['がっこう', 'こうえん', 'えき'], defaultParticle: 'で' },
+    ];
+    const PARTICLES = ['', 'が', 'を', 'に', 'で'];
 
-    const statusDot  = document.getElementById('status-dot');
-    const statusText = document.getElementById('status-text');
-    const errorBox   = document.getElementById('error-box');
-    const textarea   = document.getElementById('main-textarea');
-    const charCount  = document.getElementById('char-count');
+    let slotOrder = SLOT_DEFS.map(s => s.role);
 
-    /* ── Character counter ── */
-    textarea.addEventListener('input', () => {
-        const len = textarea.value.length;
-        const max = parseInt(textarea.maxLength);
-        charCount.textContent = `${len} / ${max} 文字`;
-        charCount.classList.toggle('warn', len > max * 0.8);
-    });
+    function renderSlots() {
+        const container = document.getElementById('word-slots');
+        container.innerHTML = '';
+        slotOrder.forEach((role, i) => {
+            const def = SLOT_DEFS.find(s => s.role === role);
+            const el = document.createElement('div');
+            el.className = 'word-slot';
+            el.style.order = i;
+            el.dataset.role = role;
 
-    /* ── Clear ── */
-    function clearText() {
-        textarea.value = '';
-        textarea.dispatchEvent(new Event('input'));
-        textarea.focus();
+            const samplesHtml = def.samples
+                .map(w => `<span class="chip" onclick="fillSlot('${role}','${w}')">${w}</span>`)
+                .join('');
+            const particleOptions = PARTICLES
+                .map(p => `<option value="${p}" ${p === def.defaultParticle ? 'selected' : ''}>${p || '（なし）'}</option>`)
+                .join('');
+
+            el.innerHTML = `
+                <div class="slot-label">${def.label} <span class="en">(${def.en})</span></div>
+                <div class="slot-samples">${samplesHtml}</div>
+                <div class="slot-row">
+                    <input class="slot-input" id="input-${role}" placeholder="自由に入力">
+                    <select class="particle-select" id="particle-${role}">${particleOptions}</select>
+                </div>
+            `;
+            container.appendChild(el);
+        });
     }
 
-    /* ── Copy full sentence ── */
-    async function copyText() {
-        const predicate = document.getElementById('predicate-roll').value;
-        const body = textarea.value.trim();
-        if (!body && !predicate) return;
+    function fillSlot(role, word) {
+        const input = document.getElementById(`input-${role}`);
+        input.value = word;
+        input.focus();
+    }
 
-        const sentence = predicate ? `${body}${predicate}。` : body;
+    function fillPredicate(word) {
+        const input = document.getElementById('predicate-input');
+        input.value = word;
+        input.focus();
+    }
+
+    function shuffleSlots() {
+        // Fisher–Yates
+        for (let i = slotOrder.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [slotOrder[i], slotOrder[j]] = [slotOrder[j], slotOrder[i]];
+        }
+        // 入力済みの値は保持したまま、枠の並び順だけを変える
+        const values = {};
+        SLOT_DEFS.forEach(({ role }) => {
+            const inp = document.getElementById(`input-${role}`);
+            const par = document.getElementById(`particle-${role}`);
+            if (inp) values[role] = { word: inp.value, particle: par.value };
+        });
+        renderSlots();
+        Object.entries(values).forEach(([role, v]) => {
+            const inp = document.getElementById(`input-${role}`);
+            const par = document.getElementById(`particle-${role}`);
+            if (inp) { inp.value = v.word; par.value = v.particle; }
+        });
+
+        const btn = document.getElementById('shuffle-btn');
+        btn.classList.add('spinning');
+        setTimeout(() => btn.classList.remove('spinning'), 400);
+    }
+
+    function decideSentence() {
+        const predicate = document.getElementById('predicate-input').value.trim();
+        const emptyNote = document.getElementById('empty-note');
+        if (!predicate) {
+            emptyNote.classList.add('visible');
+            document.getElementById('predicate-input').focus();
+            return;
+        }
+        emptyNote.classList.remove('visible');
+
+        const parts = slotOrder
+            .map(role => {
+                const word = document.getElementById(`input-${role}`).value.trim();
+                const particle = document.getElementById(`particle-${role}`).value;
+                if (!word) return '';
+                return word + particle;
+            })
+            .filter(Boolean);
+
+        const sentence = parts.join('') + predicate + '。';
+
+        document.getElementById('result-sentence').textContent = sentence;
+        document.getElementById('result-card').classList.add('visible');
+        document.getElementById('result-card').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    async function copyResult() {
+        const text = document.getElementById('result-sentence').textContent;
+        if (!text) return;
         try {
-            await navigator.clipboard.writeText(sentence);
+            await navigator.clipboard.writeText(text);
         } catch (e) {
-            // fallback
             const el = document.createElement('textarea');
-            el.value = sentence;
+            el.value = text;
             document.body.appendChild(el);
             el.select();
             document.execCommand('copy');
             document.body.removeChild(el);
         }
-
         const btn = document.getElementById('btn-copy');
         btn.textContent = '✓ コピーしました';
         btn.classList.add('copied');
@@ -392,84 +432,7 @@
         }, 2000);
     }
 
-    /* ── CSV fetch ── */
-    async function init() {
-        setStatus('loading', 'データを読み込み中…');
-        errorBox.classList.remove('visible');
-
-        try {
-            const res = await fetch(CSV_URL);
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            const text = await res.text();
-            const rows = text
-                .split(/\r?\n/)
-                .filter(r => r.trim() !== '')
-                .map(r => r.split(','));
-
-            if (rows.length === 0) throw new Error('Empty CSV');
-
-            renderTable(rows);
-            renderPredicate(rows);
-            setStatus('ok', `読み込み完了（${rows.length - 1} 行）`);
-        } catch (e) {
-            console.error(e);
-            setStatus('error', '読み込み失敗');
-            errorBox.classList.add('visible');
-            // clear skeleton
-            document.getElementById('table-body').innerHTML =
-                '<tr><td colspan="5" style="padding:20px;color:#aaa;font-size:.85rem;">データを取得できませんでした</td></tr>';
-            document.getElementById('predicate-roll').innerHTML =
-                '<option value="">(取得失敗)</option>';
-        }
-    }
-
-    function setStatus(state, msg) {
-        statusDot.className = 'status-dot ' + state;
-        statusText.textContent = msg;
-    }
-
-    function renderTable(rows) {
-        const hEl = document.getElementById('table-header');
-        const bEl = document.getElementById('table-body');
-        const headers = rows[0];
-
-        let hHtml = '<tr>';
-        for (let i = 0; i < 5; i++) {
-            hHtml += `<th>${(headers && headers[i]) ? headers[i] : ''}</th>`;
-        }
-        hHtml += '</tr>';
-        hEl.innerHTML = hHtml;
-
-        let bHtml = '';
-        for (let r = 1; r < Math.min(rows.length, 6); r++) {
-            bHtml += '<tr>';
-            for (let c = 0; c < 5; c++) {
-                const val = (rows[r] && rows[r][c] !== undefined) ? rows[r][c] : '';
-                bHtml += `<td>${val}</td>`;
-            }
-            bHtml += '</tr>';
-        }
-        bEl.innerHTML = bHtml;
-    }
-
-    function renderPredicate(rows) {
-        const sel = document.getElementById('predicate-roll');
-        const headers = rows[0];
-        const label = (headers && headers[5]) ? headers[5].trim() : '述語';
-        const words = rows.slice(1)
-            .map(r => r[5])
-            .filter(w => w !== undefined && w.trim() !== '');
-
-        sel.innerHTML = `<option value="">(${label}を選ぶ)</option>`;
-        words.forEach(w => {
-            const opt = document.createElement('option');
-            opt.value = w.trim();
-            opt.textContent = w.trim();
-            sel.appendChild(opt);
-        });
-    }
-
-    init();
+    renderSlots();
 </script>
 
 </body>
