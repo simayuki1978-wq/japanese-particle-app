@@ -19,7 +19,30 @@
             --gold-light: #fef9e7;
             --border:     #d5c9b8;
             --shadow:     rgba(26,26,46,0.12);
+            --purple:       #6c3483;
+            --purple-light: #f5eef8;
+            --kanji-tint:   rgba(26,82,118,0.04);
         }
+
+        [data-theme="dark"] {
+            --ink:        #f1ece0;
+            --paper:      #17161f;
+            --red:        #e86a5c;
+            --red-light:  rgba(232,106,92,0.14);
+            --blue:       #6bb3e0;
+            --blue-mid:   #4a9bd1;
+            --blue-light: rgba(107,179,224,0.14);
+            --gold:       #dcb24a;
+            --gold-light: rgba(220,178,74,0.14);
+            --border:     #423f54;
+            --shadow:     rgba(0,0,0,0.35);
+            --purple:       #b083c9;
+            --purple-light: rgba(176,131,201,0.14);
+            --kanji-tint:   rgba(255,255,255,0.03);
+        }
+
+        body { transition: background-color .25s, color .25s; }
+        .nav-card { transition: transform .18s, box-shadow .18s, background .18s, border-color .25s; }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -49,7 +72,7 @@
             font-family: 'Kaisei Decol', serif;
             font-size: clamp(220px, 40vw, 420px);
             font-weight: 700;
-            color: rgba(26,82,118,0.04);
+            color: var(--kanji-tint);
             user-select: none;
             line-height: 1;
             letter-spacing: -.02em;
@@ -147,10 +170,10 @@
         .nav-card.composition::before { background: var(--blue-light); }
         .nav-card.composition:hover::before { opacity: 1; }
 
-        .nav-card.ha { border-color: #6c3483; box-shadow: 4px 4px 0 #6c3483; }
-        .nav-card.ha:hover { box-shadow: 6px 6px 0 #6c3483; }
-        .nav-card.ha:active { box-shadow: 2px 2px 0 #6c3483; }
-        .nav-card.ha::before { background: #f5eef8; }
+        .nav-card.ha { border-color: var(--purple); box-shadow: 4px 4px 0 var(--purple); }
+        .nav-card.ha:hover { box-shadow: 6px 6px 0 var(--purple); }
+        .nav-card.ha:active { box-shadow: 2px 2px 0 var(--purple); }
+        .nav-card.ha::before { background: var(--purple-light); }
         .nav-card.ha:hover::before { opacity: 1; }
 
         .card-icon {
@@ -164,7 +187,7 @@
         }
         .particle .card-icon    { background: var(--red-light);  color: var(--red); }
         .composition .card-icon { background: var(--blue-light); color: var(--blue); }
-        .ha .card-icon          { background: #f5eef8;           color: #6c3483; }
+        .ha .card-icon          { background: var(--purple-light); color: var(--purple); }
 
         .card-text { position: relative; z-index: 1; }
         .card-title {
@@ -175,7 +198,7 @@
         }
         .particle .card-title    { color: var(--red); }
         .composition .card-title { color: var(--blue); }
-        .ha .card-title          { color: #6c3483; }
+        .ha .card-title          { color: var(--purple); }
 
         .card-arrow {
             margin-left: auto; flex-shrink: 0;
@@ -199,9 +222,31 @@
             animation: fadeUp .6s ease .5s both;
             position: relative; z-index: 1;
         }
+
+        /* ── THEME TOGGLE ── */
+        .theme-toggle {
+            position: fixed; top: 18px; right: 18px; z-index: 2;
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 42px; height: 42px; border-radius: 50%;
+            background: var(--paper); border: 1.5px solid var(--border);
+            cursor: pointer; font-size: 1.1rem;
+            box-shadow: 0 2px 8px var(--shadow);
+            transition: background .2s, transform .15s, border-color .2s;
+            animation: fadeUp .6s ease .1s both;
+        }
+        .theme-toggle:hover { transform: translateY(-1px); border-color: var(--blue); }
     </style>
+    <script>
+        // ページ描画前にテーマを適用（切り替え時のちらつき防止）
+        (function () {
+            const saved = localStorage.getItem('sakubun-theme');
+            if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+        })();
+    </script>
 </head>
 <body>
+
+<button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="ダークモード切り替え">🌙</button>
 
 <!-- giant decorative kanji -->
 <div class="bg-kanji"><span>語</span></div>
@@ -242,6 +287,26 @@
 </div>
 
 <footer>© 2024 日本語学習サポート</footer>
+
+<script>
+    function applyThemeIcon() {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        document.getElementById('theme-toggle').textContent = isDark ? '☀️' : '🌙';
+    }
+    function toggleTheme() {
+        const root = document.documentElement;
+        const isDark = root.getAttribute('data-theme') === 'dark';
+        if (isDark) {
+            root.removeAttribute('data-theme');
+            localStorage.setItem('sakubun-theme', 'light');
+        } else {
+            root.setAttribute('data-theme', 'dark');
+            localStorage.setItem('sakubun-theme', 'dark');
+        }
+        applyThemeIcon();
+    }
+    applyThemeIcon();
+</script>
 
 </body>
 </html>
