@@ -361,10 +361,11 @@
 <script>
     /* ── 仮のサンプルデータ（あとで実際のスプレッドシートに差し替え可能） ── */
     const SLOT_DEFS = [
-        { role: 'subject', label: '主語', en: 'subject', samples: ['わたし', 'あなた', 'せんせい'], defaultParticle: 'が' },
-        { role: 'object',  label: '目的語', en: 'object',  samples: ['ほん', 'みず', 'えいが'],   defaultParticle: 'を' },
-        { role: 'time',    label: '時',   en: 'time',    samples: ['きょう', 'あした', 'まいあさ'], defaultParticle: 'に' },
-        { role: 'place',   label: '場所', en: 'place',   samples: ['がっこう', 'こうえん', 'えき'], defaultParticle: 'で' },
+        { role: 'subject', label: 'だれ／なに', en: 'who / what', samples: ['わたし', 'あなた', 'かれ', 'かのじょ'], defaultParticle: 'が' },
+        { role: 'object',  label: 'だれ／なに', en: 'who / what', samples: ['ほん', 'ごはん', 'みず'],   defaultParticle: 'を' },
+        { role: 'time',    label: 'いつ',   en: 'when',    samples: ['きょう', '３じ', '３日'], defaultParticle: 'に' },
+        { role: 'place',   label: 'どこ', en: 'where',   samples: ['かいしゃ', 'こうえん', 'えき'], defaultParticle: 'で' },
+        { role: 'manner',  label: 'どんな', en: 'how',     samples: ['はやく', 'ゆっくり', 'とても'], defaultParticle: '' },
     ];
     const PARTICLES = ['', 'が', 'を', 'に', 'へ', 'で', 'と', 'も'];
 
