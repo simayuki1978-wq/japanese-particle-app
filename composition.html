@@ -456,7 +456,7 @@
             })
             .filter(Boolean);
 
-        const sentence = parts.join('') + predicate + '。';
+        const sentence = [...parts, predicate].join('　') + '。';
 
         document.getElementById('result-sentence').textContent = sentence;
         document.getElementById('result-card').classList.add('visible');
